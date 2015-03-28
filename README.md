@@ -1,2 +1,2 @@
 # slides
-Slides of my Talks
+You can find slides to my talks and workshops here.
