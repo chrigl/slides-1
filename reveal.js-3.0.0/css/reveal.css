@@ -43,19 +43,23 @@ body {
   color: #fff;
   text-shadow: none; }
 
+/*********************************************
+ * ADDED BY Thomas Lohner
+ *********************************************/
 .left {
   text-align: left; }
-  
-.floatleft {
-	  float:left;
-  }
 
 .right {
-text-align: right; }
+	text-align: right; }
+
+.center {
+	text-align: center; }
+
+.floatleft {
+	float:left; }
 
 .floatright {
-  float:right;
-}
+	float:right; }
 
 /*********************************************
  * VIEW FRAGMENTS
@@ -303,7 +307,7 @@ text-align: right; }
   margin: auto;
   overflow: visible;
   z-index: 1;
-  text-align: center;
+  text-align: left;
   -webkit-perspective: 600px;
           perspective: 600px;
   -webkit-perspective-origin: 50% 40%;
