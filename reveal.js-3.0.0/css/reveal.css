@@ -43,23 +43,6 @@ body {
   color: #fff;
   text-shadow: none; }
 
-/*********************************************
- * ADDED BY Thomas Lohner
- *********************************************/
-.left {
-  text-align: left; }
-
-.right {
-	text-align: right; }
-
-.center {
-	text-align: center; }
-
-.floatleft {
-	float:left; }
-
-.floatright {
-	float:right; }
 
 /*********************************************
  * VIEW FRAGMENTS
