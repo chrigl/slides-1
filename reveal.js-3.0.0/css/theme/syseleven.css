@@ -46,7 +46,8 @@ body {
 	text-align: center; }
 
 .floatleft {
-	float:left; }
+	float:left;
+	margin-right: 30px !important; }
 
 .floatright {
 	float:right; }
@@ -59,7 +60,7 @@ body {
 	}
 	
 .location {
-	color: #BAFF00;
+	color: #98ca00;
 	font-weight: bold; }
 
 	
@@ -215,14 +216,14 @@ body {
  * LINKS
  *********************************************/
 .reveal a {
-  color: #42affa;
+  color: #98ca00;
   text-decoration: none;
   -webkit-transition: color 0.15s ease;
   -moz-transition: color 0.15s ease;
   transition: color 0.15s ease; }
 
 .reveal a:hover {
-  color: #8dcffc;
+  color: #82b52f;
   text-shadow: none;
   border: none; }
 
