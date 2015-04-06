@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="de">
+  <head>
+	<meta charset="utf-8">
+	<title>10 Performance Myths you shouldn't trust</title>
+	<meta name="description" content="Performance Mythen">
+	<meta name="author" content="Thomas Lohner">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+	<link rel="stylesheet" href="../reveal.js-3.0.0/css/reveal.css">
+	<link rel="stylesheet" href="../reveal.js-3.0.0/css/theme/syseleven.css" id="theme">
+	<link rel="stylesheet" href="../reveal.js-3.0.0/lib/css/zenburn.css">
+	<script>
+		var link = document.createElement( 'link' );
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName( 'head' )[0].appendChild( link );
+	</script>
+	<!--[if lt IE 9]>
+	<script src="lib/js/html5shiv.js"></script>
+	<![endif]-->
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+
+<section data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$">
+<pre><code></code></pre>
+<script type="text/template" >
+<!-- .slide: class="left" data-background="../reveal.js-3.0.0/sys11-images/140212-SYS11-Presentor-Background-01-Title-02-90.png" -->
+
+## Busted! 10 Performance Myths you shouldn't trust. 
+
+<aside class="author">
+Thomas Lohner<br>
+CTO SysEleven GmbH<br>
+<span class="location">PHP Meeting Kaunas 2015-04-08</span>
+</aside>
+
+---
+
+
+# #1 MySQL Indexes: The more the better!
+
+---
+
+
+### MySQL Data- vs. Indexsize
+
+![](media/mysql_index.png)
+
+---
+
+### too many indexes are bad
+
+- InnoDB Data + Indexes need to fit in Memory
+- Indexes hurt Write-Performance
+- Duplicate indexes? [pt-duplicate-key-checker](http://www.percona.com/doc/percona-toolkit/2.2/pt-duplicate-key-checker.html)<br/>(Check out *Leftmost-Prefix* in MySQL Docs)
+- 3-Minute-Test http://use-the-index-luke.com/
+
+---
+
+# #2 nginx is faster than apache
+
+---
+
+<!-- .slide: class="left" -->
+
+### Apache: Wrong way<!-- .element: class="fragment" data-fragment-index="1" -->
+
+.htaccess
+```apache
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+```
+vhost.conf
+```apache
+<Directory "/var/www/www.invaliddomain.de/htdocs">
+  Options Followsymlinks
+  AllowOverride All
+  Require all granted
+</Directory>
+```
+
+---
+
+Apache Benchmark: Requests / Second
+![htaccess](media/apache_1.png)
+
+--
+
+Apache Benchmark: Requests / Second
+![htaccess](media/apache_2.png)
+
+--
+
+Apache Benchmark: Requests / Second
+![htaccess](media/apache_3.png)
+
+--
+
+Apache Benchmark: Requests / Second
+![htaccess](media/apache_4.png)
+
+--
+
+Apache Benchmark: Requests / Second
+![htaccess](media/apache_5.png)
+
+---
+
+<!-- .slide: class="left" -->
+### Apache: Correct way
+
+vhost.conf
+```apache
+<Directory "/var/www/www.invaliddomain.de/htdocs">
+	Options Followsymlinks
+	AllowOverride None
+	Require all granted
+	RewriteEngine On
+	RewriteBase /
+	RewriteRule ^index\.php$ - [L]
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule . /index.php [L]
+</Directory>
+```
+
+---
+
+Apache Benchmark: Requests / Second
+![htaccess](media/apache_6.png)
+
+---
+
+# #3 php-fpm is faster than mod_php
+
+---
+
+### PHP Benchmark
+
+![PHP](media/HelloWorld.png)
+
+http://blog.a2o.si/2009/06/24/apache-mod_php-compared-to-nginx-php-fpm/<!-- .element: class="caption" -->
+
+---
+
+### Recommended Setup
+- nginx for static files
+- Apache + mod_php for applications
+
+---
+
+# #4 use a CDN / put static files on optimized serves
+
+---
+
+### Static Files cause 97% of traffic...
+![image-size](media/image-size.png)
+
+http://httparchive.org/interesting.php<!-- .element: class="caption" -->
+
+---
+
+### ...But only 1% of the load!
+![image-size](media/image-load.png)
+
+---
+
+- ### Don't buy servers for images!
+
+- ### Use CDN only for...
+
+  - intercontinental Traffic
+  - DDoS Protection ([cloudflare](https://www.cloudflare.com), [cedexis](http://www.cedexis.com))
+  - on Demand Scaling Features
+
+---
+
+# #5 spread images and static files on multiple domains
+
+---
+
+### TCP-Slow-Start
+![TCP-Slowstart](media/tcp_slowstart.png)
+
+http://www.site.uottawa.ca/~bochmann/CourseModules/NetworkQoS/<!-- .element: class="caption" -->
+
+---
+
+### Too many domains are bad
+- new connections start slow
+- better have few but fast connections
+- use keepalive
+- use gzip
+
+---
+
+# #6 Store files on RAM-Drive (tmpfs)
+
+---
+
+### Linux Memory Usage
+![RAM](media/ram.png)
+
+---
+
+### No need for RAM-Drive
+- Files will end up in Linux Filesystem Cache
+- doesn't scale on multiple servers
+- except for write-heavy applications
+
+---
+
+# #7 Slow Queries are evil
+
+---
+
+### Slow Queries...
+![Slow Queries](media/slow-queries.png)
+
+---
+
+### ... vs. All Queries
+![Slow Queries](media/all-queries.png)
+
+---
+
+### Optimize Queries which:
+- run very often
+- are easy to make faster
+- are responsible for Locks
+- create tmp-Tables on disk
+
+
+---
+
+# #8 Use memcached / redis as Object-Cache
+
+---
+
+<!-- .slide: class="left" -->
+Fetching data from MySQL *(sql.php)*
+```PHP
+$con= mysql_connect($dbHost, $dbUser, $dbPwd);
+
+$sql="SELECT oxfixed, oxseourl, oxexpired, oxtype 
+      FROM oxseo WHERE oxobjectid = '5764c8a260478f971.37083474'";
+
+$res=mysql_query($sql);
+
+$row=mysql_fetch_assoc($res);
+
+#... 1052 more Queries
+
+```
+
+--
+
+<!-- .slide: class="left" -->
+Fetching data from memcached *(memcache.php)*
+```PHP
+$con=  memcache_connect("10.0.70.4",11211);
+
+$sql="SELECT oxfixed, oxseourl, oxexpired, oxtype 
+      FROM oxseo WHERE oxobjectid = '5764c8a260478f971.37083474'";
+
+$hash=md5($sql);
+
+$res=memcache_get($con,$hash);
+
+$row=unserialize($res);
+
+#... 1052 more Queries
+
+```
+
+--
+
+<!-- .slide: class="left" -->
+Fetching data from APC-Usercache *(apcu.php)*
+```PHP
+$sql = "SELECT oxfixed, oxseourl, oxexpired, oxtype 
+      FROM oxseo WHERE oxobjectid = '5764c8a260478f971.37083474'";
+
+$hash = md5($sql);
+
+$row = apc_fetch($hash);
+
+#... 1052 more Queries
+
+```
+
+---
+
+### Benchmark Results
+
+| Stoarge-Engine             | Runtime  |
+| ---------------------------|:--------:|
+| *sql.php*                  | 300 ms   |
+| *memcache.php*             | 290 ms   |
+| *memcache.php (localhost)* | **60 ms**|
+| *apc.php*                  | **10 ms**|
+ 
+
+---
+
+# #9 varnish / Fullpage-Caching makes the site fast
+
+---
+
+### Yes, Caching is really fast, but
+# N.E.P.I.A.C.H.<!-- .element: class="fragment" data-fragment-index="1" -->
+**(Not Every Page-Impression Is A Cache-Hit)**<!-- .element: class="fragment" data-fragment-index="1" -->
+
+---
+
+### Cache-Hitrate
+![Cache Hitrate](media/cache-hitrate.png)
+
+---
+
+### Caching Best Practices
+- measure Cache-Hitrate *(and be honest about it)*
+- keep ESI-Caching to a minimum
+- don't waste Cache-Memory on static Files
+
+---
+
+# #10 Solr / elasticsearch / $noSQL is faster than MySQL
+
+---
+
+![JustMac](media/justmac.png)<!-- .element style="border:none;" -->
+
+---
+
+http://JustMac.info
+
+- written in PHP<!-- .element: class="fragment" data-fragment-index="1" -->
+- no framework, but still MVC-pattern<!-- .element: class="fragment" data-fragment-index="2" -->
+- Fetches RSS Feeds from 150 Sources<!-- .element: class="fragment" data-fragment-index="3" -->
+- about 5k new Headlines & Teaser per day<!-- .element: class="fragment" data-fragment-index="4" -->
+- 20 Million Datasets stored in DB<!-- .element: class="fragment" data-fragment-index="5" -->
+- MySQL<!-- .element: class="fragment" data-fragment-index="6" -->
+- Storage Engine: MyISAM<!-- .element: class="fragment" data-fragment-index="7" --> *(yes,really!)*<!-- .element: class="fragment" data-fragment-index="7" -->
+
+---
+
+Loads in 29 ms!
+
+![JustMac](media/justmac-loadtime.png)<!-- .element style="border:none;" -->
+
+---
+
+## WTF?
+**(Why These Figures?)**
+
+---
+
+<!-- .slide: class="left" -->
+
+### Please don't!
+```SQL
+SELECT
+STRAIGHT_JOIN
+a.id as articleID,
+(a.configurator_set_id IS NOT NULL) as sConfigurator,
+
+IF(aDetails.sales>=30,1,0) as topseller,
+IFNULL((SELECT 1 FROM s_articles_details WHERE articleID=a.id AND kind=2 LIMIT 1), 0) as variants,
+IF(DATEDIFF('2015-03-26', a.datum) <= 30,1,0) as newArticle,
+
+(
+SELECT CONCAT(AVG(points), '|',COUNT(*)) as votes
+FROM s_articles_vote
+WHERE s_articles_vote.active=1
+AND s_articles_vote.articleID = a.id
+) AS sVoteAverange
+
+FROM s_articles AS a
+INNER JOIN s_articles_details AS aDetails
+ON aDetails.id = a.main_detail_id
+
+INNER JOIN s_articles_categories_ro ac
+ON ac.articleID = a.id
+AND ac.categoryID = 109151084
+
+INNER JOIN s_categories c
+ON c.id = ac.categoryID
+AND c.active = 1
+
+JOIN s_articles_attributes AS aAttributes
+ON aAttributes.articledetailsID = aDetails.id
+
+JOIN s_core_tax AS aTax
+ON aTax.id = a.taxID
+
+LEFT JOIN s_articles_avoid_customergroups ag
+ON ag.articleID = a.id
+AND ag.customergroupID = 1
+
+LEFT JOIN s_articles_supplier AS aSupplier
+ON aSupplier.id = a.supplierID
+
+INNER JOIN s_filter_articles fv56080
+ON fv56080.articleID = a.id
+AND fv56080.valueID = 56080
+
+LEFT JOIN s_articles_prices p
+ON p.articleDetailsID = aDetails.id
+AND p.pricegroup = 'EK'
+AND p.to = 'beliebig'
+
+LEFT JOIN s_articles_prices p2
+ON p2.articledetailsID = aDetails.id
+AND p2.pricegroup = 'EK'
+AND p2.to = 'beliebig'
+
+WHERE ag.articleID IS NULL
+AND a.active=1
+
+GROUP BY a.id
+ORDER BY aDetails.instock DESC, a.id DESC
+LIMIT 0, 48;
+  
+  
+```
+<!-- .element class="stretch" -->
+
+---
+
+<!-- .slide: class="left" -->
+
+### Good Query
+```SQL
+SELECT id, headline, teaser, link FROM headlines WHERE
+
+day='2011-05-16' AND
+feedid IN (1,2,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22)
+
+ORDER BY headlines.id DESC;
+```
+### Index
+```SQL
+ KEY 'dayfeed' ('day','feedid'),
+```
+
+---
+
+<!-- .slide: class="left" -->
+
+## Conclusion
+It's not important which software you choose. It's most important to use it correctly.<!-- .element: style="font-size:larger;" -->
+
+---
+
+But we are using it constantly wrong. Why?<!-- .element: style="font-size:larger;" -->
+
+---
+
+## What the developer thinks about his product
+
+---
+
+<!-- .slide: data-background="media/harley.jpg" -->
+
+
+<aside  style="color:grey; font-size:small; display:block; position: absolute; left: -5%; bottom: -680px;">
+http://www.motorrad-news.com/2012/08/21/harley-davidson-dyna-street-bob-sportster-1200-custom-a-und-b</a></aside>
+
+---
+
+## What sales & marketing tell customers about the product
+
+---
+
+<!-- .slide: data-background="media/bmw.jpg" -->
+
+<aside  style="color:grey; font-size:small; display:block; position: absolute; left: -5%;  bottom: -680px;">
+http://www.bimmertoday.de/2011/05/20/ps-leserwahl-bmw-s-1000-rr-und-bmw-motorrad-ausgezeichnet/
+</aside>
+
+---
+
+## How customers use the product
+
+---
+
+<!-- .slide: data-background="media/sofa.jpg" -->
+
+<aside  style="color:grey; font-size:small; display:block; position: absolute; left: -5%;  bottom: -680px;">
+http://metro.co.uk/2013/03/21/how-to-unload-a-truck-stacked-full-of-bamboo-without-getting-your-hands-dirty-3553135/
+</aside>
+
+---
+
+Don't be the guy with the sofa. Ask yourself:<!-- .element: style="font-size:larger;" -->
+
+> Am i using it the best way? Or am i just doing what all the others do?<!-- .element: style="font-size:larger;" -->
+
+
+---
+
+<!-- .slide: class="left" -->
+
+## Thank You! Questions?<!-- .element: style="margin-left:-40px;" -->
+
+
+![Thomas Lohner](../img/Lola.jpg)<!-- .element: style="float:left; margin-left:-40px; margin-right:30px !important;" -->
+
+Slides & Contribute:<br>
+[ThomasLohner.github.io/slides](https://ThomasLohner.github.io/slides/)
+
+Contact me:<br>
+[facebook.com/ThomasLohner](https://www.facebook.com/ThomasLohner)
+[tl@syseleven.de](mailto:tl@syseleven.de)
+
+
+Join:<br>
+[facebook.com/EcommerceWanderzirkus](https://www.facebook.com/EcommerceWanderzirkus)
+[facebook.com/groups/DevOpsNinjas](http://facebook.com/groups/DevOpsNinjas)
+
+Get Awesome Hosting:<br>
+[SysEleven.de](http://www.syseleven.de)
+
+
+</script>
+</section>
+
+      </div>
+    </div>
+	<script src="../reveal.js-3.0.0/lib/js/head.min.js"></script>
+	<script src="../reveal.js-3.0.0/js/reveal.js"></script>
+	<script>
+		// Full list of configuration options available at:
+		// https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			history: true,
+			center: true,
+			slideNumber: false,
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+			// Optional reveal.js plugins
+			dependencies: [
+				{ src: '../reveal.js-3.0.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+				{ src: '../reveal.js-3.0.0/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+				{ src: '../reveal.js-3.0.0/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+				{ src: '../reveal.js-3.0.0/plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+				{ src: '../reveal.js-3.0.0/plugin/zoom-js/zoom.js', async: true },
+				{ src: '../reveal.js-3.0.0/plugin/notes/notes.js', async: true }
+			]
+		});
+    </script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-3595616-6', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>
