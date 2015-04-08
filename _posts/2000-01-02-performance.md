@@ -19,7 +19,7 @@ Sie schwirren in Blogs, HowTos und Whitepapers durch’s Internet: Tipps & Trick
 ## Busted! Dangerous Performance Myths in the web
 {: style="text-align:left;" }
 
-![Apache vs. Nginx](Performance-Mythen/media/thumbnail.jpg){: style="float:left; margin-right:30px;"}
+![Apache vs. Nginx](Performance-Myths/media/thumbnail.jpg){: style="float:left; margin-right:30px;"}
 
 Language: english, Location: [PHP-Developer Meetup, Kaunas, 2015]
 
