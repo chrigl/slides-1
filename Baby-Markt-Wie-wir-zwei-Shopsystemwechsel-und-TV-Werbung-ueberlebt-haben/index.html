@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="../reveal.js-3.0.0/css/reveal.css">
 	<link rel="stylesheet" href="../reveal.js-3.0.0/css/theme/syseleven.css" id="theme">
 	<link rel="stylesheet" href="../reveal.js-3.0.0/lib/css/zenburn.css">
-	<link rel="stylesheet" href="../font-awesome-4.3.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./../font-awesome-4.3.0/css/font-awesome.min.css">
 	<script>
 		var link = document.createElement( 'link' );
 		link.rel = 'stylesheet';
@@ -27,7 +27,7 @@
     <div class="reveal">
       <div class="slides">
 
-<section data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$">
+<section data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$" data-separator-notes="^\n----\n$">
 <pre><code></code></pre>
 <script type="text/template" >
 <!-- .slide: class="left" data-background="../reveal.js-3.0.0/sys11-images/140212-SYS11-Presentor-Background-01-Title-02-90.png" -->
@@ -42,12 +42,269 @@ Daniel Schlichtholz, Entwickler Baby-Markt.de<br>
 
 ---
 
+Wechsel der Shopsoftware in 2010<!-- .element style="font-size:150%"-->
+
+- Baby-Markt hat Shop entwickelt
+- SysEleven hat Hosting-Setup gebaut
+- Trennung zwischen Development und Operations
+
+---
+
+3 Minuten nach dem Launch<!-- .element style="font-size:150%"-->
+
+![Devops](media/devops.jpg)<!-- .element class="fragment" data-fragment-index="1" style="width:55%"-->
+
+---
+
+Warum ist das passiert?<!-- .element style="font-size:200%"-->
+
+---
+
+Fehler #1: Wir haben nicht getestet.<!-- .element style="font-size:150%"-->
+
+---
+
+Fehler #2: Wir haben unabhängig voneinenader gearbeitet und nicht ausreichend miteinander gesprochen.<!-- .element style="font-size:150%"-->
+
+---
+
+Warum ist die Zusammenarbeit zwischen Shopbetreiber und Dienstleister heutzutage viel entscheidender als früher?<!-- .element style="font-size:150%"-->
+
+---
+
+Weil E-Commerce in den letzten Jahren sehr komplex geworden ist.<!-- .element style="font-size:150%"-->
 
 ---
 
 <!-- .slide: class="left" -->
 
-## Thomas Lohner<!-- .element: style="margin-left:-40px;" -->
+![Nikolaus Kopernikus](media/kopernikus.jpg)<!-- .element: style="float:left; margin-right:30px !important;" -->
+
+Nikolaus Kopernikus<!-- .element: style="font-size:110%;" -->
+
+
+** 19. Februar 1473*
+
+*† 24. Mai 1543*
+
+---
+
+![Nikolaus Kopernikus](media/kopernikus_today.jpg)<!-- .element: style="height:15em;" -->
+
+---
+
+Nikolaus Kopernikus<!-- .element: style="font-size:110%;" -->
+
+> ...war einer der bedeutendsten Astronomen der Neuzeit. In seinem Hauptwerk beschreibt er das heliozentrische Weltbild des Sonnensystems, nach dem sich die Erde um die eigene Achse dreht und sich zudem wie die anderen Planeten um die Sonne bewegt...
+
+[http://de.wikipedia.org/wiki/Nikolaus_Kopernikus](http://de.wikipedia.org/wiki/Nikolaus_Kopernikus)<!-- .element: style="color:grey; font-size:30%; top:-20px;"  -->
+
+---
+
+... und das war nur sein Hobby!<!-- .element: style="font-size:150%;" -->
+
+---
+
+> Kopernikus war Frauenburger Domherr sowie Jurist, Administrator und Arzt im Dienste des Fürstbistums Ermland in Preußen, <b>der sich in seiner freien Zeit der Astronomie, Mathematik und Kartografie widmete.</b>
+
+[http://de.wikipedia.org/wiki/Nikolaus_Kopernikus](http://de.wikipedia.org/wiki/Nikolaus_Kopernikus)<!-- .element: style="color:grey; font-size:30%; top:-20px;"  -->
+
+---
+
+Wäre es heute denkbar, dass ein Arzt, Jurist und Bürgermeister erfolgreich werden kann in Mathematik, Astronomie oder Kartografie?<!-- .element: style="font-size:150%;" -->
+
+---
+
+![Chuck Norris](media/chuck_norris.jpg)
+
+---
+
+<!-- .slide: style="font-size:150%;" -->
+
+Entwicklung entsteht aus *Diversifikation* und *Spezialisierung*
+
+---
+
+<!-- .slide: style="font-size:150%;" -->
+
+Je mehr wir lernen, umso<br />komplizierter wird es.
+
+---
+
+E-Commerce früher: Generalist
+
+![Generalist](media/generalist.jpg)
+
+---
+
+E-Commerce heute: Spezialist
+
+![Spezialist](media/spezialist.jpg)
+
+---
+
+Erfolgsfaktoren im E-Commerce (früher)
+
+- Design und Gestaltung
+- Benutzerfreundlichkeit
+- Marketing
+- Sortiment
+- Preis-Leistung
+- Service
+- Bezahlung
+- Versand
+
+---
+
+Weiterer Erfolgsfaktor im E-Commerce:<!-- .element style="font-size:150%"-->
+
+Verantwortungvolle Zusammenarbeit zwischen Shopbetreiber und Dienstleister<!-- .element style="font-size:150%"-->
+
+---
+
+Warum gab es einen zweiten Relaunch?<!-- .element style="font-size:200%"-->
+
+---
+
+Baby-Markt Traffic bei TV-Spots
+
+![TV-Traffic](media/tv-traffic.png)
+
+----
+
+Frage: wer macht TV-Werbung oder plant es künftig zu tun?
+
+---
+
+- Entlastung der Datenbank Server
+- Code-Verbesserung
+- schnellere Time To Market
+- bessere Skalierbarkeit
+- moderne Technologie
+- organisch gewachsen = kompliziert zu warten
+- Weg von: unbenutze Features abschalten
+- Besser: auf nötige Features fokussieren
+
+---
+
+Wie haben wir das erreicht?<!-- .element style="font-size:200%"-->
+
+---
+
+<!-- .slide: class="left" -->
+
+Separation of concerns<!-- .element style="font-size:150%"-->
+
+- Checkout in Oxid
+- Katalog in Foxx:
+    - optimiertes Frontend (nur benötigte Features)
+    - Daten in Elasticsearch (keine MySQL-Queries)
+    - basiert auf Symfony2 Framework
+    - keine User-Sessions
+    - Time to first Byte: 200ms
+
+---
+
+<!-- .slide: class="left" -->
+<span style="font-size:150%">Was haben wir beim zweiten Relaunch *technisch* besser gemacht?</span>
+
+- A/B-Tests über vorgeschalteten LoadBalancer
+- Templates identisch zu Oxid <br/>(keine Verfälschung der Messung)
+- sukzessive Steigerung des Traffics in Foxx (Start mit 5%)
+- Notfallplan: Traffic Foxx = 0%
+
+---
+
+<!-- .slide: class="left" -->
+
+<span style="font-size:150%">Was haben wir beim zweiten Relaunch *organisatorisch* besser gemacht?</span>
+
+
+- mehr Energie in Vorbereitung
+- gemeinsam erarbeitet (baby-markt.de und SysEleven):
+    - Relaunch-Plan
+    - Rollback-Plan
+- Messbarkeit beider Systeme sichergestellt
+
+---
+
+<!-- .slide: class="left" -->
+
+Erste Auswertung<!-- .element style="font-size:150%"-->
+
+- Shop ist schneller als vorher
+- Grundsätzlich funktionert es
+- Keine Lastprobleme, kein Serverausfall
+
+Aber:
+
+- Desktop konvertiert in Foxx leicht schlechter
+- Mobile Geräte deutlich schlechter
+
+Autsch. Das entpricht nicht unseren Erwartungen.
+
+----
+
+Studie: 1 Sekunde weniger Ladezeit bringt X% mehr Umsatz
+
+---
+
+<!-- .slide: class="left" -->
+
+Ursachenforschung<!-- .element style="font-size:150%"-->
+
+1. Zunächst stressfreier Rückswitch auf 100% Oxid
+1. Auswertung von Trackingdaten:
+  - Desktop: Suche hat zu viele 0-Treffer
+  - Mobil: Anteil alter Mobilgeräte höher als erwartet
+1. Bugs gefixt
+1. Suche verbessert
+1. Traffic schrittweise erhöht
+1. seit Januar 2015 zu 100% auf Foxx
+
+----
+
+Templates sind gleich? Nur optisch aber nicht technisch.
+Deshalb Bugs möglich (Oxid = Smarty, Foxx = Twig).
+
+---
+
+<!-- .slide: class="left" -->
+
+Checkliste bei Relaunch<!-- .element style="font-size:150%"-->
+
+1. Mit Dienstleister(n) reden
+1. Notfallplan (Rückswitch)
+1. Messbarkeit sicherstellen
+1. Vergleichbarkeit sicherstellen
+1. Sukzessive Traffic erhöhen
+1. <nobr>Messdaten auswerten (Conversion, Last)</nobr>
+
+---
+
+<!-- .slide: class="left" -->
+
+Daniel Schlichtholz<!-- .element: style="margin-left:-50px;font-size:150%" -->
+
+
+![Daniel Schlichtholz](media/DanielSchlichtholz.jpg)<!-- .element: style="float:left; margin-left:-50px; margin-right:25px !important;" -->
+
+Contact me:<br>
+<i class="fa fa-facebook-official"></i> [facebook.com/daniel.schlichtholz](https://www.facebook.com/daniel.schlichtholz)<br />
+<i class="fa fa-envelope"></i> [schlichtholz@baby-markt.de](mailto:schlichtholz@baby-markt.de)
+
+Get awesome baby stuff:<br />
+<i class="fa fa-external-link-square"></i> [baby-markt.de](http://www.baby-markt.de)
+
+Open Source Projects:<br />
+<i class="fa fa-external-link-square"></i> [MysQLDumper](http://www.mysqldumper.de)<br />
+<i class="fa fa-external-link-square"></i> [oTranCe](http://www.otrance.de)
+
+---
+
+<!-- .slide: class="left" -->
+
+Thomas Lohner<!-- .element: style="margin-left:-40px;font-size:150%" -->
 
 
 ![Thomas Lohner](../img/Lola.jpg)<!-- .element: style="float:left; margin-left:-40px; margin-right:30px !important;" -->
