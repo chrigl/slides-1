@@ -10,13 +10,7 @@ section.has-light-background, section.has-light-background h1, section.has-light
 /*********************************************
  * GLOBAL STYLES
  *********************************************/
-body {
-  background-image: url(../../sys11-images/140212-SYS11-Presentor-Background-01-Quote-01-572.png);
-  background-size:   cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-color: #222; }
-
+  
 .reveal {
   font-family: 'Source Sans Pro', Helvetica, sans-serif;
   font-size: 38px;
@@ -27,10 +21,83 @@ body {
   color: #fff;
   background: #bee4fd;
   text-shadow: none; }
-
+  
+   
 .reveal .slides > section, .reveal .slides > section > section {
   line-height: 1.3;
-  font-weight: inherit; }
+  font-weight: inherit;
+ }
+
+ /*********************************************
+  * ADDED BY Christian Buggedei
+  *********************************************/
+
+ /* How to use the swoosh: 
+  ************************ 
+  * To have the title slide different than the
+  * others, just prefix the slide with this: 
+  * 
+  * <!-- .slide: class="left" data-state="swoosh" -->
+  *
+  * This will move the SysEleven logo to the left 
+  * and add the Swirl to the lower left corner
+  * 
+  * You can still use data-background for other
+  * slides, but that will only act as an overlay
+  * over the existing backgrounds    
+  */
+ .swoosh body:before {
+ 	background-position: 3% 3%;
+ }  
+
+ .swoosh body:after {
+    background-image: url(../../sys11-images/SysElevenSwirlTransparent.png);
+    background-repeat: no-repeat;
+ 	background-size: 55%;
+    background-position: 0% 99%;	
+ 	content: "";
+ 	position: absolute;
+ 	z-index: 101;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+ 	left:0;
+ 	bottom:0;
+ }
+
+ body:before {
+    background-image: url(../../sys11-images/SysElevenLogo.png);
+    background-repeat: no-repeat;
+ 	background-size: 10%;
+    background-position: 97% 3%;	
+ 	content: "";
+ 	position: absolute;
+ 	z-index: 101;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+ }  
+  
+ body {
+    background-image: url(../../sys11-images/SysElevenNoiseHD.png);
+    background-size:   cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: #222;
+}
+
+/* 
+ * Ensure, that the slide content isn't obscured
+ * by the logos. With the percentage-sizes, this
+ * appears to be optional, commented out in case
+ * it breaks anything else.
+ */
+
+/*
+ .reveal .slides {
+    z-index: 200;
+ }
+ */
 
 
 /*********************************************
@@ -55,9 +122,9 @@ body {
 .author {
 	text-align:left;
 	float:right;
-  position: relative;
-  top:50px;
-	}
+	position: relative;
+	top:50px;
+}
 	
 .location {
 	color: #98ca00;
@@ -66,7 +133,7 @@ body {
 .caption {
 	position: fixed;
 	color: grey !important;
-  top: -60px;
+	top: -60px;
 	font-size: small !important;	
 }
 
