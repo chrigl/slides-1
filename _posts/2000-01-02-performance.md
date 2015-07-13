@@ -14,9 +14,9 @@ style: left
 
 *German - [E-Commerce Camp 2014 - Jena, Germany](http://www.ecommerce-camp.de/redner-sessions/sessions-2014/)*
 
-Sie schwirren in Blogs, HowTos und Whitepapers durch’s Internet: Tipps & Tricks zur Steigerung der Performance von Web-Applikationen. Aber halten all diese "Best Practices“ wirklich was sie versprechen? Ist Apache wirklich schneller als nginx? Worauf muss ich achten und auf welche Urban Legends sollte ich lieber nicht hören? Thomas Lohner plaudert aus dem Performance-Nähkästchen und zeigt welche schlimmen Performance-Mathen sogar schädlich sein können. (**[see slides](Performance-Mythen/)**)
+Sie schwirren in Blogs, HowTos und Whitepapers durch’s Internet: Tipps & Tricks zur Steigerung der Performance von Web-Applikationen. Aber halten all diese "Best Practices“ wirklich was sie versprechen? Ist Apache wirklich schneller als nginx? Worauf muss ich achten und auf welche Urban Legends sollte ich lieber nicht hören? Thomas Lohner plaudert aus dem Performance-Nähkästchen und zeigt welche schlimmen Performance-Mythen sogar schädlich sein können. (**[see slides](Performance-Mythen/)**)
 
-## Busted! 10 Performnce Myths you should avoid
+## Busted! 10 Performance Myths you should avoid
 {: style="text-align:left;" }
 
 [![Apache vs. Nginx](Performance-Myths/media/thumbnail.jpg){: style="float:left; margin-right:30px;"}](Performance-Myths/)
