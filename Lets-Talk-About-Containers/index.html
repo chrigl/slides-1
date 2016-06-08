@@ -42,7 +42,7 @@ Cloud Architect SysEleven GmbH<br>
 
 ---
 
-What could you expect from this talk?<!-- .element: style="font-size:110%;" -->
+#### What could you expect from this talk?
 
 * Brief introduction about our infrastructure
 * Different ways of deploying software
@@ -50,7 +50,7 @@ What could you expect from this talk?<!-- .element: style="font-size:110%;" -->
 
 ---
 
-FIXME?
+FIXME? THROW AWAY?
 What qualifies me to give this talk?
 
 * Working in the area of web development and shipping since 1999
@@ -58,9 +58,540 @@ What qualifies me to give this talk?
 
 ---
 
+### What are you guys at SysEleven doing?
+
+---
+
+### Running two types of infrastructure!
+
+---
+
+### A new one, based on OpenStack…
+
+![OpenStack](img/Cloud_OpenCloud_Chillin.png)
+
+---
+
+### … a legacy one, based on Parallels Virtuozzo…
+
+![Virtuozzo](img/virtuozzo.jpg)
+
+Note:
+
+Which basically provides integration into OpenStack these days
+
+---
+
+### … but most important: Provide, maintain and monitor the infrastructure, our customers can deploy their code into.
+
+Note:
+
+* monitoring as in: doing 24x7 for our customers
+
+---
+
+### Let's step into the legacy platform
+
+---
+
+### In the past, Virtuozzo was basically
+
+* image format
+* local storage
+* Linux based container runtime
+ * (but maintained outside of mainline)
+
+Note:
+
+* around 2008
+* Which is still true, but there is more
+
+---
+
+### But treating containers like usual virtual machines
+
+* with a complete Linux running inside
+* sure, except of the kernel
+* injecting files to distribution dependend locations
+
+Note:
+
+* Your targeted distribution has to be supported
+* But with a huge performance benefit over VMs
+
+---
+
+### Some more history
+
+---
+
+From the early days, we have decent trending and alerting for all the services the customer provides.
+
+Note:
+
+* nagios + zabbix for monitoring
+
+---
+
+In the beginning we managed physical machines, and the associated containers (or Virtual Environment / VE in Virtuozzo speach) in some wiki pages. New containers were created by hand, and added to the wiki page.
+
+Note:
+
+* Like you expect, this did not scale out very well.
+
+---
+
+Over the years, we developed some tools, to spawn new containers with a minimum set of needed configuration. But we still totally lack a customer facing API.
+
+Note:
+
+* Because of this we decided use OpenStack
+
+---
+
+### At some point, Configuration Management became cool
+
+… and we added a Puppet Master to our infrastructure, and registered all the containers to it. Based on this, we automated much stuff, like provisioning of basic stuff to the container and registering services to the monitoring.
+
+---
+
+### These days we are running
+
+* about 3200 of those containers
+* on about 300 physical machines
+
+---
+
+# But
+
+---
+
+We still treat the containers like computers.
+
+Note:
+
+* more litally
+
+---
+
+![Giraf](img/giraf.jpg)
+
+Note:
+
+* like cute baby girafs
+
+---
+
+### A traditional setup is still
+
+* MySQL master slave setup
+* Admin server
+* a bunch of App server
+* maybe some kind of search engine
+
+---
+
+* We hand over these provisioned containers like they are physical computer.
+ * Except that we are able to move the containers around without relevant downtime.
+* The customer deploys specific software into it.
+* We moinitor and maintain the services and the OS.
+ * The customer maintains his own code.
+
+Note:
+
+* deploying in terms of syncing the code from Admin to App server
+* this kind of deployment is soo 90th!
+
+---
+
+All this, you can still do in the new world(tm) of containers.
+
+But it is definitely not intended to be used this way!
+
+---
+
+FIXME
+There are some obvious problems with this kind of deployment.
+
+Note:
+
+and yes. Most of them where house-made, and aviodable even with this tech-stack
+
+---
+
+It is relatively difficult to build Virtuozzo templates (which is basically an image).
+
+Note:
+
+Mostly because of the individual VEs
+
+---
+
+It's not very reproducable.
+
+Note:
+
+In the best case, a new App server is a clone of a existing one.
+
+But the entire setup is not very reproducable
+
+---
+
+In case of not cloning: Creation time dependencies.
+
+Note:
+
+Which makes it likely the setup fails because of 1 dependency that fails.
+
+---
+
+Customers software is not packaged in any way.
+
+Note:
+
+It is not easy to verify the installation
+
+---
+
+You don't have an overview of the versions of the deployed software.
+
+---
+
+Updates have to go to each container separately.
+
+---
+
+Rollbacks to a defined set of installed software and deployed software are nearly impossible.
+
+Note:
+
+For sure, everything is possible. Some thing just cause more pain.
+
+Just to name a few
+
+---
+
+### What do we get from the shiny new world of containers?
+
+---
+
+First of all: Another layer of indirection!
+
+---
+
+Did I mention, that you should keep your infrastructure as boring as possible?
+
+---
+
+Interresting infrastructure tends to fail in interresting ways!
+
+Note:
+
+Anyway. Lets get back to the containers.
+
+---
+
+Thanks to Docker, it is very very easy to build images! 
+
+Note:
+
+Unfortunately it is also very easy to build crappy images
+
+---
+
+* Never ever build software in a container thought for production and leave traces of build utils!
+ * Build in a prepared build-container, that only exists to create the artefact.
+* You may should build packages for your targeted distribution.
+ * Especially if you have dependencies to dist stuff.
+* Use Best practices, the tool does not force you to do it right.
+
+Note:
+
+Read on image best practices and why deleting stuff does not reduce the image size!
+
+---
+
+At this point, you only have build dependencies!
+
+No apt-get/git clone when spawning the container.
+
+Note:
+
+But this is totally up to you.
+
+---
+
+### The real fun starts when your image is created and lives in some registry!
+
+Note:
+
+* No matter if public or private
+
+---
+
+There are ways, like docker-compose or kubectl, to define and run a deployment.
+
+Note:
+
+* So you can test your deployment over and over agan.
+* In case of docker-compose they can be set up even locally!
+ * or against docker-swarm
+
+---
+
+In some simple scenario, you just deploy your containers, using traditional configuration management like Puppet, Chef, salt or ansible.
+
+---
+
+Really. I dreamed of such things at some points in my IT-life.
+
+---
+
+In any way: Your infrastructure is code as well.
+
+Note:
+
+Which is really good!
+
+---
+
+It is easy to build fresh setups for testing and Q&amp;A.
+
+---
+
+Later, the accepted deployment will be spawned for production.
+
+---
+
+But lets step back from full blown container orchestrations.
+
+---
+
+Even if you don't want to use that complicated and addition layers, you gained a huge benefit!
+
+---
+
+You can run your image everywhere!
+
+Note:
+
+* No matter what: Baremetal, AWS, OpenStack, Google Cloud Engine, you name it.
+* Except of our legacy platform tue to technical restrictions.
+* In new versions of Virtuozzo this would work fine too.
+
+---
+
+And this is IMHO the most important of the container movement.  I think the Linux cgroups/namespaces-stuff is far less important.
+
+---
+
+These days you can also run your Linux container image in:
+
+* a flat chroot without cgroups/namespaces using rkt fly by CoreOS
+* a small KVM (with an injected kernel), thanks to CoreOS and Intel
+
+---
+
+You can run it on FreeBSD using JetPack
+
+---
+
+You can even run on Windows!
+
+---
+
+And all this *without* any modification to your image!
+
+---
+
+### But there will be dragons!
+
+---
+
+In my experience, deployments fail more likely because of misconfigured next-hops (like DB), instead of crappy software.
+
+Note:
+
+* Anyway. You now can test it over and over again.
+
+---
+
+Plugging services together is more difficult in a floating environment.
+
+Note:
+
+* Things like Service Discovery are far out of scope here.
+
+---
+
+FIXME
+
+More dragons?
+
+---
+
+### Back to us: Where could we use containers?
+
+Note:
+
+* reminding how we manage services so far.
+
+---
+
+A layer on top of OpenStack Compute Nodes
+
+* kubernetes
+* docker-swarm
+* CoreOS fleet
+* Orchestration e.g. via ansible
+
+Note:
+
+* Yes. There are solutions from OpenStack. But they in fact do the same.
+* This is the only way to isolate customers from each other.
+ * Most open source container orchestration solutions are not yet ready for multi tenancy
+
+---
+
+Customers could use base images from some official registry and build their own images.
+
+Note:
+
+* Like Docker Hub or quay by CoreOS
+
+---
+
+We could as well provide some base images that we maintain.
+
+---
+
+### But: Here will be some more Dragons
+
+---
+
+We have to maintain the additional layer!
+
+One for each customer!
+
+---
+
+Do we monitor the services of the customer and be alarmed when they go down?
+
+---
+
+Or, do we just monitor the orchestration-layer?
+
+---
+
+What if there is a critical bug in some image?
+
+---
+
+Who is responsible to build a new "production" image?
+
+---
+
+Do we have access to customers code/artefacts to build a new image?
+
+---
+
+Or, do we just notify customers?
+
+---
+
+Who is responsible for rolling out the new image?
+
+Note:
+
+* To recap
+* Currently we only update/maintain dist software.
+* Do not touch the customers software.
+
+---
+
+All this, and more that I forgot here, may differ from one customer to the other.
+
+---
+
+### Is "onto of OpenStack" the only possible area to use containers?
+
+---
+
+Far away from what is possible!
+
+---
+
+For example, also OpenStack Services are…
+
+---
+
+… Services!
+
+---
+
+Why not maintaining a kubernetes cluster and run OpenStack as a Service?
+
+---
+
+Seriously!
+
+![Stackanetes](img/tectonic-k8s-openstack.svg)
+
+https://tectonic.com/blog/openstack-and-kubernetes-come-together.html
+
+---
+
+### These technologies are around there!
+
+---
+
+They will gain you benefits.
+
+---
+
+But they will introduce new layers of indirection, that you have to manage.
+
+Note:
+
+* or someone for you
+
+---
+
+Not everything fits into a container.
+
+![float problem](img/float_problem.gif)
+
+Note:
+
+* No one forces you to use containers!
+
+---
+
+Nothing will solve all your problems
+
+![Problems](img/all_problems.jpg)
+
+---
+
+# Use it!
+
+---
+
+###  But use it wisely!
+
+![Container fail](img/container-accident.jpg)
+
+---
+
+Recommendations:
+
+FIXME
+
+---
+
 <!-- .slide: class="left" -->
 
-## Danke! Fragen?<!-- .element: style="margin-left:-40px;" -->
+## Thanks! Questions?<!-- .element: style="margin-left:-40px;" -->
 
 
 ![Christoph Glaubitz](../img/Chris.jpg)<!-- .element: style="float:left; margin-left:-40px; margin-right:30px !important;" -->
