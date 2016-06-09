@@ -12,6 +12,7 @@
 	<link rel="stylesheet" href="../reveal.js-3.0.0/css/theme/syseleven.css" id="theme">
 	<link rel="stylesheet" href="../reveal.js-3.0.0/lib/css/zenburn.css">
 	<link rel="stylesheet" href="../font-awesome-4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/chris.css">
 	<script>
 		var link = document.createElement( 'link' );
 		link.rel = 'stylesheet';
@@ -36,7 +37,7 @@ Containers then and now<!-- .element: style="font-size:150%;" -->
 
 <aside class="author">
 Christoph Glaubitz<br>
-Cloud Architect SysEleven GmbH<br>
+Cloud Architect at SysEleven GmbH<br>
 <span class="location">ContainerDays Hamburg, 27 &amp; 28.06.2016</span>
 </aside>
 
@@ -47,14 +48,6 @@ Cloud Architect SysEleven GmbH<br>
 * Brief introduction about our infrastructure
 * Different ways of deploying software
 * You need more than just a container
-
----
-
-FIXME? THROW AWAY?
-What qualifies me to give this talk?
-
-* Working in the area of web development and shipping since 1999
-* Worked as a dev guy as well as an ops guy
 
 ---
 
@@ -82,7 +75,7 @@ Which basically provides integration into OpenStack these days
 
 ---
 
-### … but most important: Provide, maintain and monitor the infrastructure, our customers can deploy their code into.
+… but most important: Provide, maintain and monitor the infrastructure into which our customers can deploy their code into.
 
 Note:
 
@@ -94,7 +87,7 @@ Note:
 
 ---
 
-### In the past, Virtuozzo was basically
+In the past, Virtuozzo was basically
 
 * image format
 * local storage
@@ -103,12 +96,13 @@ Note:
 
 Note:
 
-* around 2008
-* Which is still true, but there is more
+around 2008
+
+Which is still true, but there is more
 
 ---
 
-### But treating containers like usual virtual machines
+But treating containers like usual virtual machines
 
 * with a complete Linux running inside
 * sure, except of the kernel
@@ -116,8 +110,9 @@ Note:
 
 Note:
 
-* Your targeted distribution has to be supported
-* But with a huge performance benefit over VMs
+Your targeted distribution has to be supported
+
+But with a huge performance benefit over VMs
 
 ---
 
@@ -129,7 +124,19 @@ From the early days, we have decent trending and alerting for all the services t
 
 Note:
 
-* nagios + zabbix for monitoring
+nagios + zabbix for monitoring
+
+---
+
+We even built a web frontend, which gathered data from multiple nagios instances to give us a single overview.
+
+Note:
+
+We run to many things to monitor for a single instance, running on a 24 Core XEON with 94GB RAM
+
+---
+
+Over time, we built billing, a local DNS-API, SSL-Cert "shop", some own metering-endpoints, deployment scripts, Backups, and more.
 
 ---
 
@@ -211,7 +218,7 @@ But it is definitely not intended to be used this way!
 ---
 
 FIXME
-There are some obvious problems with this kind of deployment.
+There are some problems with this kind of infrastructure and deployment.
 
 Note:
 
@@ -231,17 +238,43 @@ It's not very reproducable.
 
 Note:
 
-In the best case, a new App server is a clone of a existing one.
-
-But the entire setup is not very reproducable
+At least the entire deployment is not very repeatable.
 
 ---
 
-In case of not cloning: Creation time dependencies.
+So we keep the containers alive, no matter what happens. In the worst case, we clone one back from the nightly backup.
 
 Note:
 
-Which makes it likely the setup fails because of 1 dependency that fails.
+Like you might expect. We have to backup the entire container.
+
+---
+
+Because of this, we also faced problems with updating the underlying Virtuozzo infrastructure.
+
+Note:
+
+Some updates need changes to the running Filesystem, that are incompatible to earlier versions
+
+So we are not able to move containers back to a host with an older version
+
+---
+
+From the repeatable point of view: In the best case, a new App server is a clone of a existing one.
+
+---
+
+#### But
+
+We need changes to the file system of the new container, like setting the expected hostname and update the config of montoring agents.
+
+---
+
+In case of not cloning: We have creation time dependencies.
+
+Note:
+
+Which makes it likely the setup fails because of a single dependency that fails.
 
 ---
 
@@ -293,13 +326,13 @@ Anyway. Lets get back to the containers.
 
 Thanks to Docker, it is very very easy to build images! 
 
-Note:
+---
 
-Unfortunately it is also very easy to build crappy images
+Unfortunately it is also very easy to build crappy images!!
 
 ---
 
-* Never ever build software in a container thought for production and leave traces of build utils!
+* Never ever build software in a container that should go to production and leave traces of build utils!
  * Build in a prepared build-container, that only exists to create the artefact.
 * You may should build packages for your targeted distribution.
  * Especially if you have dependencies to dist stuff.
@@ -308,6 +341,12 @@ Unfortunately it is also very easy to build crappy images
 Note:
 
 Read on image best practices and why deleting stuff does not reduce the image size!
+
+---
+
+* Never add platform specific stuff like monitoring agents into your container.
+* Endpoints for specific monitoring systems are recommended…
+* But other services, and a monitoring agent is one, should go into a sidekick container!
 
 ---
 
@@ -363,15 +402,15 @@ It is easy to build fresh setups for testing and Q&amp;A.
 
 ---
 
-Later, the accepted deployment will be spawned for production.
+Later, the accepted deployment will be shipped to production.
 
 ---
 
-But lets step back from full blown container orchestrations.
+FIXME throw away? But lets step back from full blown container orchestrations.
 
 ---
 
-Even if you don't want to use that complicated and addition layers, you gained a huge benefit!
+FIXME throw away? Even if you don't want to use that complicated and addition layers, you gained a huge benefit!
 
 ---
 
@@ -385,14 +424,14 @@ Note:
 
 ---
 
-And this is IMHO the most important of the container movement. Far more than the default used technics cgroups/namespaces-stuff.
+And this is IMHO the most important of the container movement.
 
 ---
 
-These days you can also run your Linux container image in:
+These days you can also run your Linux container image
 
-* a chroot without cgroups/namespaces using rkt fly by CoreOS
-* a small KVM (with an injected kernel), thanks to CoreOS and Intel
+* in a chroot without cgroups/namespaces using rkt fly by CoreOS
+* in a small KVM (with an injected kernel), thanks to CoreOS and Intel
 
 ---
 
@@ -420,7 +459,7 @@ Note:
 
 ---
 
-Plugging services together is more difficult in a floating environment.
+Plugging services together is even more difficult in a floating environment.
 
 Note:
 
@@ -448,7 +487,7 @@ Like a new orchestration layer.
 
 ---
 
-Or a distrobuted key/value-Store.
+Or a distributed key/value-Store.
 
 ---
 
@@ -460,21 +499,20 @@ You need someone to operate all the new stuff!
 
 ---
 
-Again the opposite! You have to extend these skills by container debugging!
-
----
-
-FIXME
-
-For me, that sounds like creating more operational burdon, instead of reducing.
-
----
-
 Debugging apps in containers becomes different.
 
 ---
 
 You don't have to throw away your debugging skills!
+
+---
+
+Again the opposite! You have to extend these skills by container debugging!
+
+---
+
+FIXME
+For me, that sounds like creating more operational burdon, instead of reducing.
 
 ---
 
@@ -490,7 +528,7 @@ Bingo
 
 ---
 
-Small startup times.
+Little startup times.
 
 Note:
 
@@ -499,6 +537,12 @@ Otherwise the benefit of not spawning an entire VM does not count.
 ---
 
 Should be "stateless".
+
+Note:
+
+"global" session stores
+
+There is no lb stickiness!
 
 ---
 
@@ -537,7 +581,7 @@ I strongly encourage you to read on this.
 
 ---
 
-### Back to us: Where could we use containers?
+### Back SysEleven: Where could we use containers?
 
 Note:
 
@@ -624,7 +668,43 @@ All this, and more that I forgot here, may differ from one customer to the other
 
 ---
 
-### Is "onto of OpenStack" the only possible area to use containers?
+### Sounds like even more work for our Admins! Are there any benefits?
+
+---
+
+A very streamlined deployment process!
+
+Note:
+
+No difference between self-deployer
+
+and customers, who only handover their code.
+
+---
+
+In case of Kubernetes: Using Replication Controller.
+
+Note:
+
+Maybe even with auto scaling
+
+Where auto scaling is limited to the running VMs in the kubernetes cluster.
+
+---
+
+Kubernetes takes care about the number of running Pods.
+
+---
+
+No alerts because of a failing frontend node!
+
+---
+
+We are able to run more than one service on a VM. No matter what kind of linux each single service needs.
+
+---
+
+### Is "onto of OpenStack" the only possible area to use containers at SysEleven?
 
 ---
 
@@ -684,14 +764,18 @@ Nothing will solve all your problems
 
 ---
 
-# Use it!
+# Check the ecosystem
+
+* http://chrigl.de/slides/sysconf15-docker/#/ecosystem<!-- .element: style="font-size: 50%" -->
+* http://chrigl.de/slides/sysconf15-docker/#/resources<!-- .element: style="font-size: 50%" -->
+
+Note:
+
+shameless self plugging
 
 ---
 
-# Check the ecosystem
-
-* http://chrigl.de/slides/sysconf15-docker/#<!-- .element: style="font-size: 50%" -->
-* http://chrigl.de/slides/sysconf15-docker/#/resources<!-- .element: style="font-size: 50%" -->
+# And use it!
 
 ---
 

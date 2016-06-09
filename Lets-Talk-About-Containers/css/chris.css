@@ -1,0 +1,29 @@
+.reveal .progress span {
+  background-color: #98ca00;
+}
+
+.reveal .controls div.navigate-up.enabled:hover,
+.reveal .controls div.navigate-down.enabled:hover {
+  border-bottom-color: #82b52f;
+}
+
+.reveal .controls div.navigate-left.enabled:hover {
+  border-right-color: #82b52f;
+}
+
+.reveal .controls div.navigate-right.enabled:hover {
+  border-left-color: #82b52f;
+}
+
+.reveal .controls div.navigate-up, .reveal .controls div.navigate-up.enabled,
+.reveal .controls div.navigate-down, .reveal .controls div.navigate-down.enabled {
+  border-bottom-color: #98ca00;
+}
+
+.reveal .controls div.navigate-right, .reveal .controls div.navigate-right.enabled {
+  border-left-color: #98ca00;
+}
+
+.reveal .controls div.navigate-left, .reveal .controls div.navigate-left.enabled {
+  border-right-color: #98ca00;
+}
