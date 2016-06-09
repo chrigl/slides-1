@@ -339,11 +339,15 @@ Note:
 
 ---
 
-In some simple scenario, you just deploy your containers, using traditional configuration management like Puppet, Chef, salt or ansible.
+Really. I dreamed of such things at some points in my IT-life.
 
 ---
 
-Really. I dreamed of such things at some points in my IT-life.
+In the past, I had to deal with deployments to specific hosts, rather than spawning new containers to replace old ones.
+
+Note:
+
+Again. Remember the cute giraf.
 
 ---
 
@@ -381,13 +385,13 @@ Note:
 
 ---
 
-And this is IMHO the most important of the container movement.  I think the Linux cgroups/namespaces-stuff is far less important.
+And this is IMHO the most important of the container movement. Far more than the default used technics cgroups/namespaces-stuff.
 
 ---
 
 These days you can also run your Linux container image in:
 
-* a flat chroot without cgroups/namespaces using rkt fly by CoreOS
+* a chroot without cgroups/namespaces using rkt fly by CoreOS
 * a small KVM (with an injected kernel), thanks to CoreOS and Intel
 
 ---
@@ -424,9 +428,112 @@ Note:
 
 ---
 
+You decouple yourself from the exact host, the container is running on.
+
+---
+
+Which definitely does not mean, that you are free of any operational issues.
+
+---
+
+The opposite is true!
+
+---
+
+You have new things running in your infrastructure.
+
+---
+
+Like a new orchestration layer.
+
+---
+
+Or a distrobuted key/value-Store.
+
+---
+
+Some kind of Service Discovery.
+
+---
+
+You need someone to operate all the new stuff!
+
+---
+
+Again the opposite! You have to extend these skills by container debugging!
+
+---
+
 FIXME
 
-More dragons?
+For me, that sounds like creating more operational burdon, instead of reducing.
+
+---
+
+Debugging apps in containers becomes different.
+
+---
+
+You don't have to throw away your debugging skills!
+
+---
+
+### Your applications have to be changed!
+
+---
+
+They have to be "Cloud Ready".
+
+Note:
+
+Bingo
+
+---
+
+Small startup times.
+
+Note:
+
+Otherwise the benefit of not spawning an entire VM does not count.
+
+---
+
+Should be "stateless".
+
+---
+
+### But
+
+---
+
+You will always have stateful systems.
+
+---
+
+Deal with it.
+
+---
+
+Think about twice or three times.
+
+---
+
+This is the compliacted stuff to deploy!
+
+---
+
+Monitor those services very well!
+
+---
+
+Plan, test and **regulary trigger** failover mechanisms.
+
+---
+
+I strongly encourage you to read on this.
+
+* https://charity.wtf/2016/05/31/wtf-is-operations-serverless/<!-- .element: style="font-size: 50%" -->
+* https://charity.wtf/2016/05/31/operational-best-practices-serverless/<!-- .element: style="font-size: 50%" -->
 
 ---
 
@@ -447,8 +554,12 @@ A layer on top of OpenStack Compute Nodes
 
 Note:
 
-* Yes. There are solutions from OpenStack. But they in fact do the same.
-* This is the only way to isolate customers from each other.
+Yes. There are solutions from OpenStack. But they in fact do the same.
+
+ * But may lock you into the OpenStack Container API
+
+This is the only way to isolate customers from each other.
+
  * Most open source container orchestration solutions are not yet ready for multi tenancy
 
 ---
@@ -577,15 +688,16 @@ Nothing will solve all your problems
 
 ---
 
-###  But use it wisely!
+# Check the ecosystem
 
-![Container fail](img/container-accident.jpg)
+* http://chrigl.de/slides/sysconf15-docker/#<!-- .element: style="font-size: 50%" -->
+* http://chrigl.de/slides/sysconf15-docker/#/resources<!-- .element: style="font-size: 50%" -->
 
 ---
 
-Recommendations:
+###  But use it wisely!
 
-FIXME
+![Container fail](img/container-accident.jpg)
 
 ---
 
