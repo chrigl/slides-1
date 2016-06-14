@@ -65,7 +65,7 @@ Cloud Architect at SysEleven GmbH<br>
 
 ---
 
-### … a legacy one, based on Parallels Virtuozzo…
+### … an old one, based on Parallels Virtuozzo…
 
 ![Virtuozzo](img/virtuozzo.jpg)
 
@@ -77,13 +77,15 @@ Which basically provides integration into OpenStack these days
 
 … but most important: Provide, maintain and monitor the infrastructure into which our customers can deploy their code into.
 
+![Managed](img/managed.png)
+
 Note:
 
 * monitoring as in: doing 24x7 for our customers
 
 ---
 
-### Let's step into the legacy platform
+### Let's step into the virtuozzo platform
 
 ---
 
@@ -118,6 +120,8 @@ But with a huge performance benefit over VMs
 
 ### Some more history
 
+![History](img/history.png)
+
 ---
 
 From the early days, we have decent trending and alerting for all the services the customer provides.
@@ -130,25 +134,27 @@ nagios + zabbix for monitoring
 
 We even built a web frontend, which gathered data from multiple nagios instances to give us a single overview.
 
+![sNagios](img/nagios.png)
+
 Note:
 
 We run to many things to monitor for a single instance, running on a 24 Core XEON with 94GB RAM
 
 ---
 
-Over time, we built billing, a local DNS-API, SSL-Cert "shop", some own metering-endpoints, deployment scripts, Backups, and more.
+Over time, we built billing, a local DNS-API, SSL-Cert "shop", some own metering-endpoints, Backups…
 
 ---
 
-In the beginning we managed physical machines, and the associated containers (or Virtual Environment / VE in Virtuozzo speach) in some wiki pages. New containers were created by hand, and added to the wiki page.
+…we even developed some tools, to spawn new containers with a minimum set of needed configuration.
 
-Note:
-
-* Like you expect, this did not scale out very well.
+![Robot](img/robot.jpg)
 
 ---
 
-Over the years, we developed some tools, to spawn new containers with a minimum set of needed configuration. But we still totally lack a customer facing API.
+But we still totally lack a customer facing API.
+
+![Public](img/public.jpg)
 
 Note:
 
@@ -158,14 +164,24 @@ Note:
 
 ### At some point, Configuration Management became cool
 
+![Puppet](img/puppet.png)
+
+Note:
+
 … and we added a Puppet Master to our infrastructure, and registered all the containers to it. Based on this, we automated much stuff, like provisioning of basic stuff to the container and registering services to the monitoring.
+
 
 ---
 
 ### These days we are running
 
-* about 3200 of those containers
-* on about 300 physical machines
+![listvps](img/listvps.png)
+
+Note:
+
+about 3000 of those containers
+
+on about 300 physical machines
 
 ---
 
@@ -198,47 +214,65 @@ Note:
 
 ---
 
-* We hand over these provisioned containers like they are physical computer.
- * Except that we are able to move the containers around without relevant downtime.
-* The customer deploys specific software into it.
-* We moinitor and maintain the services and the OS.
- * The customer maintains his own code.
+We start the containers, using out internal toolchain.
+
+---
+
+This also triggers puppet to install required software in the container, setting up configuration and register them to our monitoring.
+
+---
+
+We hand over *exactly* this fully managed container to the customer.
+
+![Fully managed container](img/managed-container.jpg)
+https://www.flickr.com/photos/lindzgraham/<!-- .element: style="font-size: 50%" -->
 
 Note:
 
-* deploying in terms of syncing the code from Admin to App server
-* this kind of deployment is soo 90th!
+Not any kind of image
 
 ---
 
-All this, you can still do in the new world(tm) of containers.
+Customers deploy their software to the admin server. From there it will be rsynced to the app server.
 
-But it is definitely not intended to be used this way!
+![Deploy](img/deploy.jpg)
+https://www.flickr.com/photos/auxesis/<!-- .element: style="font-size: 50%" -->
 
 ---
 
-FIXME
-There are some problems with this kind of infrastructure and deployment.
+This sucks in some ways!
+
+---
+
+Installation of the containers/computer *only* works in our infrastructure.
+
+---
+
+So changes to the infra hurt.
+
+---
+
+We have startup dependencies rather than build dependencies.
 
 Note:
 
-and yes. Most of them where house-made, and aviodable even with this tech-stack
+Many of them
 
 ---
 
-It is relatively difficult to build Virtuozzo templates (which is basically an image).
-
-Note:
-
-Mostly because of the individual VEs
-
----
-
-It's not very reproducable.
+Since the containers are used like computers, there is data in it. So it's not very reproducable.
 
 Note:
 
 At least the entire deployment is not very repeatable.
+
+---
+
+Often a new container is just a clone of an old one!
+
+Note:
+
+With things like host name and monitoring stuff changed
 
 ---
 
@@ -250,6 +284,35 @@ Like you might expect. We have to backup the entire container.
 
 ---
 
+Don't get me wrong!
+
+---
+
+You can build shiny new container images with the same problems!
+
+---
+
+Updates have to go to all containers…
+
+![Updates](img/updates.jpg)
+
+https://www.flickr.com/photos/bovinity/<!-- .element: style="font-size: 50%" -->
+
+---
+
+… rather than building a new image and replace old containers.
+
+![Replace Container](img/old-container.jpg)
+
+https://www.flickr.com/photos/nicowa/<!-- .element: style="font-size: 50%" -->
+
+Note:
+
+Again, with only build dependencies
+
+---
+
+FIXME move somewhere else
 Because of this, we also faced problems with updating the underlying Virtuozzo infrastructure.
 
 Note:
@@ -257,24 +320,6 @@ Note:
 Some updates need changes to the running Filesystem, that are incompatible to earlier versions
 
 So we are not able to move containers back to a host with an older version
-
----
-
-From the repeatable point of view: In the best case, a new App server is a clone of a existing one.
-
----
-
-#### But
-
-We need changes to the file system of the new container, like setting the expected hostname and update the config of montoring agents.
-
----
-
-In case of not cloning: We have creation time dependencies.
-
-Note:
-
-Which makes it likely the setup fails because of a single dependency that fails.
 
 ---
 
@@ -290,17 +335,29 @@ You don't have an overview of the versions of the deployed software.
 
 ---
 
-Updates have to go to each container separately.
-
----
-
 Rollbacks to a defined set of installed software and deployed software are nearly impossible.
+
+![Rollback](img/rollback.jpg)
+
+https://www.flickr.com/photos/thejesse/<!-- .element: style="font-size: 50%" -->
 
 Note:
 
 For sure, everything is possible. Some thing just cause more pain.
 
 Just to name a few
+
+---
+
+What about
+
+![Docker](img/dacker.jpg)
+
+?
+
+---
+
+![Sys11Stack](img/sys11stack.png)
 
 ---
 
