@@ -146,9 +146,17 @@ Over time, we built billing, a local DNS-API, SSL-Cert "shop", some own metering
 
 ---
 
-…we even developed some tools, to spawn new containers with a minimum set of needed configuration.
+… we even developed some tools, to spawn new containers with a minimum set of needed configuration…
 
 ![Robot](img/robot.jpg)
+
+---
+
+… with a recommend system to return the best Hardware for the requested container.
+
+![Recommend](img/recommend.jpg)
+
+https://www.flickr.com/photos/jm3/<!-- .element: style="font-size: 50%" -->
 
 ---
 
@@ -170,26 +178,9 @@ Note:
 
 … and we added a Puppet Master to our infrastructure, and registered all the containers to it. Based on this, we automated much stuff, like provisioning of basic stuff to the container and registering services to the monitoring.
 
-
 ---
 
-### These days we are running
-
-![listvps](img/listvps.png)
-
-Note:
-
-about 3000 of those containers
-
-on about 300 physical machines
-
----
-
-# But
-
----
-
-We still treat the containers like computers.
+But we still treat the containers like computers.
 
 Note:
 
@@ -202,6 +193,18 @@ Note:
 Note:
 
 * like cute baby girafs
+
+---
+
+### These days we are running
+
+![listvps](img/listvps.png)
+
+Note:
+
+about 3000 of those containers
+
+on about 300 physical machines
 
 ---
 
@@ -236,15 +239,20 @@ Not any kind of image
 Customers deploy their software to the admin server. From there it will be rsynced to the app server.
 
 ![Deploy](img/deploy.jpg)
+
 https://www.flickr.com/photos/auxesis/<!-- .element: style="font-size: 50%" -->
 
 ---
 
-This sucks in some ways!
+All this worked very well for a long period of time!
 
 ---
 
-Installation of the containers/computer *only* works in our infrastructure.
+But is very inflexible!
+
+---
+
+Installation of containers is strongly coupled to our infrastructure.
 
 ---
 
@@ -260,19 +268,41 @@ Many of them
 
 ---
 
-Since the containers are used like computers, there is data in it. So it's not very reproducable.
+Don't get me wrong!
+
+---
+
+You can build such problems in the shiny new container world as well!
 
 Note:
 
-At least the entire deployment is not very repeatable.
+so take care!
 
 ---
 
 Often a new container is just a clone of an old one!
 
+![Clone](img/clone.jpg)
+
+https://www.flickr.com/photos/arenamontanus/<!-- .element: style="font-size: 50%" -->
+
 Note:
 
 With things like host name and monitoring stuff changed
+
+---
+
+Since the containers are used like computers, there is
+
+![Data](img/data.jpg)
+
+in it.
+
+https://www.flickr.com/photos/trevorandmarjee/<!-- .element: style="font-size: 50%" -->
+
+Note:
+
+At least the entire deployment is not very repeatable.
 
 ---
 
@@ -284,14 +314,6 @@ Like you might expect. We have to backup the entire container.
 
 ---
 
-Don't get me wrong!
-
----
-
-You can build shiny new container images with the same problems!
-
----
-
 Updates have to go to all containers…
 
 ![Updates](img/updates.jpg)
@@ -300,7 +322,7 @@ https://www.flickr.com/photos/bovinity/<!-- .element: style="font-size: 50%" -->
 
 ---
 
-… rather than building a new image and replace old containers.
+… rather than building one new image and replace old containers.
 
 ![Replace Container](img/old-container.jpg)
 
@@ -312,18 +334,7 @@ Again, with only build dependencies
 
 ---
 
-FIXME move somewhere else
-Because of this, we also faced problems with updating the underlying Virtuozzo infrastructure.
-
-Note:
-
-Some updates need changes to the running Filesystem, that are incompatible to earlier versions
-
-So we are not able to move containers back to a host with an older version
-
----
-
-Customers software is not packaged in any way.
+Because customers software is not packaged in any way…
 
 Note:
 
@@ -349,6 +360,72 @@ Just to name a few
 
 ---
 
+This worked fine for a long time…
+
+---
+
+But these days we need a public facing API
+
+---
+
+We didn't have the man power to develop our own.
+
+---
+
+And we didn't want du build an proprietary
+
+![Island](img/island.jpg)
+
+*again*!
+
+https://www.flickr.com/photos/simuh/<!-- .element: style="font-size: 50%" -->
+
+---
+
+So we came up with OpenStack, and developed…
+
+---
+
+![Sys11Stack](img/sys11stack.png)
+
+Note:
+
+Which is an latest OpenStack Mitaka
+
+But changed components for storage and networking
+
+And a bunch of automation to bootstrap
+
+---
+
+We run managed setups in SysEleven Stack, as well as self managed ones.
+
+---
+
+Some customers choose to run production fully managed, and dev on self managed instances.
+
+---
+
+The concept of running the managed setups is pretty much the same as before.
+
+![Concept](img/concept.jpg)
+
+https://www.flickr.com/photos/yoroy/<!-- .element: style="font-size: 50%" -->
+
+---
+
+But with lessons learned from the old platform!
+
+![Feature](img/feature.jpg)
+
+https://www.flickr.com/photos/pictoquotes/<!-- .element: style="font-size: 50%" -->
+
+---
+
+In the past half year one question raised…
+
+---
+
 What about
 
 ![Docker](img/dacker.jpg)
@@ -357,11 +434,21 @@ What about
 
 ---
 
-![Sys11Stack](img/sys11stack.png)
+You can run docker on VMs on SysEleven Stack!
+
+Note:
+
+While this was not possible in the virtuozzo platform
 
 ---
 
-### What do we get from the shiny new world of containers?
+#### Yes!
+
+The containers run in VMs. But IMHO there is *no container vs. VM*, while VMs are one possible infrastructure for containers.
+
+---
+
+### What do we all here get from the shiny new world of containers?
 
 ---
 
@@ -383,9 +470,17 @@ Anyway. Lets get back to the containers.
 
 Thanks to Docker, it is very very easy to build images! 
 
+![Images](img/images.jpg)
+
+https://www.flickr.com/photos/smemon/<!-- .element: style="font-size: 50%" -->
+
 ---
 
 Unfortunately it is also very easy to build crappy images!!
+
+![Broken](img/broken.jpg)
+
+https://www.flickr.com/photos/57402879@N00/<!-- .element: style="font-size: 50%" -->
 
 ---
 
@@ -457,21 +552,19 @@ Which is really good!
 
 It is easy to build fresh setups for testing and Q&amp;A.
 
----
+![ship](img/ship.jpg)
 
-Later, the accepted deployment will be shipped to production.
-
----
-
-FIXME throw away? But lets step back from full blown container orchestrations.
+https://www.flickr.com/photos/saifikhan/<!-- .element: style="font-size: 50%" -->
 
 ---
 
-FIXME throw away? Even if you don't want to use that complicated and addition layers, you gained a huge benefit!
+Later, the accepted images will be shipped to production.
+
+Unlike installing software on an other (production) computer.
 
 ---
 
-You can run your image everywhere!
+Literally, you can run your image everywhere!
 
 Note:
 
@@ -505,6 +598,8 @@ And all this *without* any modification to your image!
 ---
 
 ### But there will be dragons!
+
+![Dragon](img/dragon.jpg)
 
 ---
 
@@ -564,12 +659,15 @@ You don't have to throw away your debugging skills!
 
 ---
 
-Again the opposite! You have to extend these skills by container debugging!
+Again the opposite!
 
 ---
 
-FIXME
-For me, that sounds like creating more operational burdon, instead of reducing.
+You have to extend these skills by container debugging!
+
+---
+
+For me, that sounds like creating more operational burden, instead of reducing.
 
 ---
 
@@ -638,30 +736,43 @@ I strongly encourage you to read on this.
 
 ---
 
-### Back SysEleven: Where could we use containers?
-
-Note:
-
-* reminding how we manage services so far.
+Whats next on containers at SysEleven?
 
 ---
 
-A layer on top of OpenStack Compute Nodes
+Managed orchestration layer?
 
-* kubernetes
-* docker-swarm
-* CoreOS fleet
-* Orchestration e.g. via ansible
+---
 
-Note:
+Like setting up a Kubernetes or Docker Swarm cluster
 
-Yes. There are solutions from OpenStack. But they in fact do the same.
+![Cluster](img/cluster.jpg)
 
- * But may lock you into the OpenStack Container API
+https://www.flickr.com/photos/turkletom/<!-- .element: style="font-size: 50%" -->
 
-This is the only way to isolate customers from each other.
+---
 
- * Most open source container orchestration solutions are not yet ready for multi tenancy
+And monitor and maintain it.
+
+![Monitor](img/monitoring.jpg)
+
+https://www.flickr.com/photos/mray/<!-- .element: style="font-size: 50%" -->
+
+---
+
+But do not care about the services running on it.
+
+---
+
+We could go one step further
+
+---
+
+Running services for customers!
+
+---
+
+Do monitoring and maintenance for the services.
 
 ---
 
@@ -678,20 +789,6 @@ We could as well provide some base images that we maintain.
 ---
 
 ### But: Here will be some more Dragons
-
----
-
-We have to maintain the additional layer!
-
-One for each customer!
-
----
-
-Do we monitor the services of the customer and be alarmed when they go down?
-
----
-
-Or, do we just monitor the orchestration-layer?
 
 ---
 
@@ -718,10 +815,6 @@ Note:
 * To recap
 * Currently we only update/maintain dist software.
 * Do not touch the customers software.
-
----
-
-All this, and more that I forgot here, may differ from one customer to the other.
 
 ---
 
@@ -757,11 +850,24 @@ No alerts because of a failing frontend node!
 
 ---
 
-We are able to run more than one service on a VM. No matter what kind of linux each single service needs.
+We are able to run more than one service on a VM, no matter what kind of linux each single service needs.
 
 ---
 
-### Is "onto of OpenStack" the only possible area to use containers at SysEleven?
+There are separate teams for maintaining the services and running Kubernetes.
+
+---
+
+![Longway](img/longway.jpg)
+
+And not even clear how far to go.
+
+https://www.flickr.com/photos/96665017@N00/<!-- .element: style="font-size: 50%" -->
+
+
+---
+
+### Is "on OpenStack" the only possible area to use containers at SysEleven?
 
 ---
 
@@ -815,7 +921,7 @@ Note:
 
 ---
 
-Nothing will solve all your problems
+It will solve all your problems
 
 ![Problems](img/all_problems.jpg)
 
@@ -842,6 +948,10 @@ shameless self plugging
 
 ---
 
+![Good](img/good.jpg)
+
+---
+
 <!-- .slide: class="left" -->
 
 ## Thanks! Questions?<!-- .element: style="margin-left:-40px;" -->
@@ -854,10 +964,6 @@ Contact me:<br>
 
 Get Awesome Hosting:<br>
 [SysEleven.de](http://www.syseleven.de)
-
-Slides & Contribute:<br>
-[ThomasLohner.github.io](https://ThomasLohner.github.io/slides/)
-
 
 </script>
 </section>
