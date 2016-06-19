@@ -45,13 +45,193 @@ Cloud Architect at SysEleven GmbH<br>
 
 #### What could you expect from this talk?
 
+* What is a container
 * Brief introduction about our infrastructure
 * Different ways of deploying software
 * You need more than just a container
 
 ---
 
-### What are you guys at SysEleven doing?
+What is a container?
+
+![Container](img/containers.jpg)
+
+https://www.flickr.com/photos/sewm/<!-- .element: style="font-size: 50%" -->
+
+---
+
+Simplified: Each container gets its own runtime environment, but all share the same kernel.
+
+---
+
+With the advantage of just running one kernel.
+
+Note:
+
+No additional overhead by VM kernels
+
+---
+
+But the disadvantage of just running one kernel.
+
+---
+
+Same kernel version for all the containers.
+
+---
+
+It is not possible to load different modules for containers.
+
+---
+
+OS type in containers must be the same like the host.
+
+(Which is not true any more!)
+
+---
+
+The most simple way of containering is a traditional chroot environment. Introduced in 1979.
+
+---
+
+Which isolates runtime environments, but does not isolate process space and devices, and does nothing with resource control.
+
+---
+
+In 2000, FreeBSD jails were introduced. chroot was extended further isolation mechanisms, like process namespaces. Processes in one jail can only see processes in the same jail.
+
+Note:
+
+There are more isolations like prohibition of creating device nodes, mounts and so on.
+
+---
+
+In this time, Virtuozzo started with Containers on Linux.
+
+---
+
+My first contact with containers was around 2007
+
+![First Contact](img/first_contact.png)
+
+
+https://en.wikipedia.org/wiki/Star_Trek:_First_Contact#/media/File:Star_Trek_08-poster.png<!-- .element: style="font-size: 50%" -->
+
+Note:
+
+Containers as in "more than just chroot"
+
+---
+
+When I worked in the Tivoli Storage Manager Team at IBM, where we had to support AIX WPARs and Solaris Zones.
+
+Note:
+
+WPAR = Workload Partition
+
+---
+
+The ideas are still the same, also in the times of Application Containers.
+
+* Using the same kernel.
+* Isolate environments as strong as possible.
+
+---
+
+### Why did Containers get this traction in the past few years?
+
+---
+
+I think, it the easy way to create and deploy images.
+
+![Images](img/images.jpg)
+
+https://www.flickr.com/photos/smemon/<!-- .element: style="font-size: 50%" -->
+
+---
+
+We can run the image (almost) everywhere!
+
+Note:
+
+* No matter what: Baremetal, AWS, OpenStack, Google Cloud Engine, you name it.
+* Except of our legacy platform tue to technical restrictions.
+* In new versions of Virtuozzo this would work fine too.
+
+--
+
+… in a chroot without isolation and resource control using rkt fly by CoreOS
+
+--
+
+… in a small KVM (with an injected kernel), again using rkt, thanks to CoreOS and Intel
+
+--
+
+… on FreeBSD using JetPack
+
+--
+
+… even on Windows!
+
+---
+
+And all this *without* any modification to the image!
+
+---
+
+It changed the way we think about software.
+
+---
+
+### But there will be dragons!
+
+![Dragon](img/dragon.jpg)
+
+--
+
+Unfortunately it is also very easy to build crappy images!!
+
+![Broken](img/broken.jpg)
+
+https://www.flickr.com/photos/57402879@N00/<!-- .element: style="font-size: 50%" -->
+
+--
+
+In my experience, deployments fail more likely because of misconfigured next-hops (like DB), instead of crappy software.
+
+Note:
+
+* Anyway. You now can test it over and over again.
+
+--
+
+Plugging services together is even more difficult in a floating environment.
+
+Note:
+
+* Things like Service Discovery are far out of scope here.
+
+--
+
+More management software is needed!
+
+--
+
+I strongly encourage you to read on this.
+
+* https://charity.wtf/2016/05/31/wtf-is-operations-serverless/<!-- .element: style="font-size: 50%" -->
+* https://charity.wtf/2016/05/31/operational-best-practices-serverless/<!-- .element: style="font-size: 50%" -->
+
+--
+
+"Microservices: because solving business problems is hard but building loosely coupled fault-tolerant distributed systems is easy."
+
+https://twitter.com/neil_conway/status/743086761493008384<!-- .element: style="font-size: 50%" -->
+
+---
+
+### So. What are you guys at SysEleven doing?
 
 ---
 
@@ -85,6 +265,18 @@ Note:
 
 ---
 
+### On two levels!
+
+---
+
+The hardware and hypervisor "layer".
+
+---
+
+And the running Virtual Environments or Machines.
+
+---
+
 ### Let's step into the virtuozzo platform
 
 ---
@@ -93,6 +285,7 @@ In the past, Virtuozzo was basically
 
 * image format
 * local storage
+* network isolation
 * Linux based container runtime
  * (but maintained outside of mainline)
 
@@ -104,17 +297,22 @@ Which is still true, but there is more
 
 ---
 
-But treating containers like usual virtual machines
+… treating containers like usual virtual machines
 
 * with a complete Linux running inside
-* sure, except of the kernel
-* injecting files to distribution dependend locations
+ * sure, except of the kernel
 
 Note:
 
 Your targeted distribution has to be supported
 
+---
+
 But with a huge performance benefit over VMs
+
+![Performance](img/performance.jpg)
+
+https://www.flickr.com/photos/17612257@N00/<!-- .element: style="font-size: 50%" -->
 
 ---
 
@@ -164,9 +362,19 @@ But we still totally lack a customer facing API.
 
 ![Public](img/public.jpg)
 
+---
+
+Everything works via phone and ticketing system.
+
+![Voice activated Admin](img/telefon.jpg)
+
+https://www.flickr.com/photos/nekudo/<!-- .element: style="font-size: 50%" -->
+
 Note:
 
-* Because of this we decided use OpenStack
+Voice Activated Admin
+
+Because of this we decided use OpenStack
 
 ---
 
@@ -225,7 +433,7 @@ This also triggers puppet to install required software in the container, setting
 
 ---
 
-We hand over *exactly* this fully managed container to the customer.
+We hand over *exactly* this fully managed and running container to the customer.
 
 ![Fully managed container](img/managed-container.jpg)
 https://www.flickr.com/photos/lindzgraham/<!-- .element: style="font-size: 50%" -->
@@ -292,7 +500,7 @@ With things like host name and monitoring stuff changed
 
 ---
 
-Since the containers are used like computers, there is
+There is
 
 ![Data](img/data.jpg)
 
@@ -342,7 +550,7 @@ It is not easy to verify the installation
 
 ---
 
-You don't have an overview of the versions of the deployed software.
+… there is no overview of the versions of the deployed software.
 
 ---
 
@@ -360,7 +568,9 @@ Just to name a few
 
 ---
 
-This worked fine for a long time…
+Anyway.
+
+This worked fine for a very long time…
 
 ---
 
@@ -372,7 +582,7 @@ We didn't have the man power to develop our own.
 
 ---
 
-And we didn't want du build an proprietary
+And we didn't want to build an proprietary
 
 ![Island](img/island.jpg)
 
@@ -382,7 +592,7 @@ https://www.flickr.com/photos/simuh/<!-- .element: style="font-size: 50%" -->
 
 ---
 
-So we came up with OpenStack, and developed…
+So we came up with OpenStack, and created…
 
 ---
 
@@ -398,7 +608,7 @@ And a bunch of automation to bootstrap
 
 ---
 
-We run managed setups in SysEleven Stack, as well as self managed ones.
+We run managed setups in SysEleven Stack.
 
 ---
 
@@ -406,7 +616,7 @@ Some customers choose to run production fully managed, and dev on self managed i
 
 ---
 
-The concept of running the managed setups is pretty much the same as before.
+The core concept of running the managed setups is pretty much the same as before.
 
 ![Concept](img/concept.jpg)
 
@@ -422,6 +632,18 @@ https://www.flickr.com/photos/pictoquotes/<!-- .element: style="font-size: 50%" 
 
 ---
 
+The setups are flexible, and we can also run them on AWS.
+
+---
+
+It based on ansible, which creates VMs using the specific API, and runs the deployment in it.
+
+---
+
+We train customers to be able to do relevant tasks on their own.
+
+---
+
 In the past half year one question raised…
 
 ---
@@ -434,17 +656,75 @@ What about
 
 ---
 
-You can run docker on VMs on SysEleven Stack!
-
-Note:
-
-While this was not possible in the virtuozzo platform
+Basically you can run every OS you like to. Yet Windows.
 
 ---
 
-#### Yes!
+### So. Yes!
 
-The containers run in VMs. But IMHO there is *no container vs. VM*, while VMs are one possible infrastructure for containers.
+--
+
+Just install docker into the VM.
+
+--
+
+Sure. The containers run in VMs. But IMHO there is *no container vs. VM*, while VMs are one possible infrastructure for containers.
+
+--
+
+Did I mention, that you should keep your infrastructure as boring as possible?
+
+--
+
+Interresting infrastructure tends to fail in interresting ways!
+
+---
+
+Are there future plans to provide managed container services?
+
+--
+
+Yes. But limited to man power!
+
+http://www.syseleven.de/jobs/
+
+--
+
+We yet know what cantainers are. We know the tools and how to debug in the container world.
+
+--
+
+But that is not "managed conatainer services" at all!
+
+---
+
+We think about providing managed orchestration layers.
+
+--
+
+Like
+
+![kubernetes](img/kubernetes.png)
+
+--
+
+… or Docker Swarm
+
+![Docker Swarm](img/swarm.png)
+
+--
+
+We would manage all the services of the conductor.
+
+![Conductor](img/dirigent.jpg)
+
+--
+
+The customer is responsible for the container workloads.
+
+---
+
+FIXME to be gone the rest
 
 ---
 
@@ -454,33 +734,10 @@ The containers run in VMs. But IMHO there is *no container vs. VM*, while VMs ar
 
 First of all: Another layer of indirection!
 
----
-
-Did I mention, that you should keep your infrastructure as boring as possible?
-
----
-
-Interresting infrastructure tends to fail in interresting ways!
-
-Note:
-
-Anyway. Lets get back to the containers.
 
 ---
 
 Thanks to Docker, it is very very easy to build images! 
-
-![Images](img/images.jpg)
-
-https://www.flickr.com/photos/smemon/<!-- .element: style="font-size: 50%" -->
-
----
-
-Unfortunately it is also very easy to build crappy images!!
-
-![Broken](img/broken.jpg)
-
-https://www.flickr.com/photos/57402879@N00/<!-- .element: style="font-size: 50%" -->
 
 ---
 
@@ -564,60 +821,6 @@ Unlike installing software on an other (production) computer.
 
 ---
 
-Literally, you can run your image everywhere!
-
-Note:
-
-* No matter what: Baremetal, AWS, OpenStack, Google Cloud Engine, you name it.
-* Except of our legacy platform tue to technical restrictions.
-* In new versions of Virtuozzo this would work fine too.
-
----
-
-And this is IMHO the most important of the container movement.
-
----
-
-These days you can also run your Linux container image
-
-* in a chroot without cgroups/namespaces using rkt fly by CoreOS
-* in a small KVM (with an injected kernel), thanks to CoreOS and Intel
-
----
-
-You can run it on FreeBSD using JetPack
-
----
-
-You can even run on Windows!
-
----
-
-And all this *without* any modification to your image!
-
----
-
-### But there will be dragons!
-
-![Dragon](img/dragon.jpg)
-
----
-
-In my experience, deployments fail more likely because of misconfigured next-hops (like DB), instead of crappy software.
-
-Note:
-
-* Anyway. You now can test it over and over again.
-
----
-
-Plugging services together is even more difficult in a floating environment.
-
-Note:
-
-* Things like Service Discovery are far out of scope here.
-
----
 
 You decouple yourself from the exact host, the container is running on.
 
@@ -727,12 +930,6 @@ Monitor those services very well!
 
 Plan, test and **regulary trigger** failover mechanisms.
 
----
-
-I strongly encourage you to read on this.
-
-* https://charity.wtf/2016/05/31/wtf-is-operations-serverless/<!-- .element: style="font-size: 50%" -->
-* https://charity.wtf/2016/05/31/operational-best-practices-serverless/<!-- .element: style="font-size: 50%" -->
 
 ---
 
