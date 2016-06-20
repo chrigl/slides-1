@@ -33,22 +33,22 @@
 <script type="text/template" >
 <!-- .slide: class="left" data-background="../reveal.js-3.0.0/sys11-images/140212-SYS11-Presentor-Background-01-Title-02-90.png" -->
 
-Containers then and now<!-- .element: style="font-size:150%;" -->
+Container through the ages<!-- .element: style="font-size:150%;" -->
 
 <aside class="author">
 Christoph Glaubitz<br>
 Cloud Architect at SysEleven GmbH<br>
-<span class="location">ContainerDays Hamburg, 27 &amp; 28.06.2016</span>
+<span class="location">ContainerDays Hamburg, 28.06.2016</span>
 </aside>
 
 ---
 
 #### What could you expect from this talk?
 
-* What is a container
+* A little bit of history on containers
 * Brief introduction about our infrastructure
+ * of cource not on each detail
 * Different ways of deploying software
-* You need more than just a container
 
 ---
 
@@ -106,7 +106,7 @@ There are more isolations like prohibition of creating device nodes, mounts and 
 
 ---
 
-In this time, Virtuozzo started with Containers on Linux.
+In this time, Virtuozzo started with containers on Linux.
 
 ---
 
@@ -138,7 +138,7 @@ The ideas are still the same, also in the times of Application Containers.
 
 ---
 
-### Why did Containers get this traction in the past few years?
+### Why did containers get this traction in the past few years?
 
 ---
 
@@ -231,7 +231,7 @@ https://twitter.com/neil_conway/status/743086761493008384<!-- .element: style="f
 
 ---
 
-### So. What are you guys at SysEleven doing?
+### So… What are you guys at SysEleven doing?
 
 ---
 
@@ -640,7 +640,7 @@ It based on ansible, which creates VMs using the specific API, and runs the depl
 
 ---
 
-We train customers to be able to do relevant tasks on their own.
+We enable customers to be able to do relevant tasks on their own. And get the full power out of the Cloud.
 
 ---
 
@@ -668,7 +668,7 @@ Just install docker into the VM.
 
 --
 
-Sure. The containers run in VMs. But IMHO there is *no container vs. VM*, while VMs are one possible infrastructure for containers.
+Sure. The containers run in VMs. But there is IMHO *no container vs. VM*, while VMs are one possible infrastructure for containers.
 
 --
 
@@ -684,13 +684,29 @@ Are there future plans to provide managed container services?
 
 --
 
-Yes. But limited to man power!
+### Of course
+
+---
+
+But limited to man power!
 
 http://www.syseleven.de/jobs/
 
 --
 
+In a first step, we will help you to get the orchestration layer up and running.
+
+--
+
+We help you with setting up monitoring.
+
+--
+
 We yet know what cantainers are. We know the tools and how to debug in the container world.
+
+--
+
+We will help you to get your deployment chains to work.
 
 --
 
@@ -714,438 +730,62 @@ Like
 
 --
 
-We would manage all the services of the conductor.
+We would manage and monitor all the services of the conductor.
 
 ![Conductor](img/dirigent.jpg)
 
 --
 
-The customer is responsible for the container workloads.
+We may manage additional services like a gitlab, jenkins or a private image registry.
+
+--
+
+The customer still is responsible all for the container workloads.
 
 ---
 
-FIXME to be gone the rest
+Maybe in a far
 
----
+![Future](img/future.jpg)
 
-### What do we all here get from the shiny new world of containers?
-
----
-
-First of all: Another layer of indirection!
-
-
----
-
-Thanks to Docker, it is very very easy to build images! 
-
----
-
-* Never ever build software in a container that should go to production and leave traces of build utils!
- * Build in a prepared build-container, that only exists to create the artefact.
-* You may should build packages for your targeted distribution.
- * Especially if you have dependencies to dist stuff.
-* Use Best practices, the tool does not force you to do it right.
+https://www.flickr.com/photos/79909830@N04/<!-- .element: style="font-size: 50%" -->
 
 Note:
 
-Read on image best practices and why deleting stuff does not reduce the image size!
+Maybe in a far future…
+
+--
+
+We could provided managed services running in containers.
 
 ---
 
-* Never add platform specific stuff like monitoring agents into your container.
-* Endpoints for specific monitoring systems are recommended…
-* But other services, and a monitoring agent is one, should go into a sidekick container!
+####  Some resources
+
+* https://charity.wtf/2016/05/31/wtf-is-operations-serverless/<!-- .element: style="font-size: 50%" -->
+* https://charity.wtf/2016/05/31/operational-best-practices-serverless/<!-- .element: style="font-size: 50%" -->
+* https://twitter.com/neil_conway/status/743086761493008384<!-- .element: style="font-size: 50%" -->
+* http://kubernetes.io/<!-- .element: style="font-size: 50%" -->
+* https://docs.docker.com/swarm/<!-- .element: style="font-size: 50%" -->
+* https://github.com/chrigl/heat-examples<!-- .element: style="font-size: 50%" -->
+* https://chrigl.de/slides/sysconf15-docker/#/ecosystem<!-- .element: style="font-size: 50%" -->
+* https://chrigl.de/slides/sysconf15-docker/#/resources<!-- .element: style="font-size: 50%" -->
 
 ---
 
-At this point, you only have build dependencies!
+# Happy
 
-No apt-get/git clone when spawning the container.
-
-Note:
-
-But this is totally up to you.
-
----
-
-### The real fun starts when your image is created and lives in some registry!
-
-Note:
-
-* No matter if public or private
-
----
-
-There are ways, like docker-compose or kubectl, to define and run a deployment.
+![Container](img/containering.jpg)
 
 Note:
 
-* So you can test your deployment over and over agan.
-* In case of docker-compose they can be set up even locally!
- * or against docker-swarm
+Happy containering!
 
 ---
 
-Really. I dreamed of such things at some points in my IT-life.
-
----
-
-In the past, I had to deal with deployments to specific hosts, rather than spawning new containers to replace old ones.
-
-Note:
-
-Again. Remember the cute giraf.
-
----
-
-In any way: Your infrastructure is code as well.
-
-Note:
-
-Which is really good!
-
----
-
-It is easy to build fresh setups for testing and Q&amp;A.
-
-![ship](img/ship.jpg)
-
-https://www.flickr.com/photos/saifikhan/<!-- .element: style="font-size: 50%" -->
-
----
-
-Later, the accepted images will be shipped to production.
-
-Unlike installing software on an other (production) computer.
-
----
-
-
-You decouple yourself from the exact host, the container is running on.
-
----
-
-Which definitely does not mean, that you are free of any operational issues.
-
----
-
-The opposite is true!
-
----
-
-You have new things running in your infrastructure.
-
----
-
-Like a new orchestration layer.
-
----
-
-Or a distributed key/value-Store.
-
----
-
-Some kind of Service Discovery.
-
----
-
-You need someone to operate all the new stuff!
-
----
-
-Debugging apps in containers becomes different.
-
----
-
-You don't have to throw away your debugging skills!
-
----
-
-Again the opposite!
-
----
-
-You have to extend these skills by container debugging!
-
----
-
-For me, that sounds like creating more operational burden, instead of reducing.
-
----
-
-### Your applications have to be changed!
-
----
-
-They have to be "Cloud Ready".
-
-Note:
-
-Bingo
-
----
-
-Little startup times.
-
-Note:
-
-Otherwise the benefit of not spawning an entire VM does not count.
-
----
-
-Should be "stateless".
-
-Note:
-
-"global" session stores
-
-There is no lb stickiness!
-
----
-
-### But
-
----
-
-You will always have stateful systems.
-
----
-
-Deal with it.
-
----
-
-Think about twice or three times.
-
----
-
-This is the compliacted stuff to deploy!
-
----
-
-Monitor those services very well!
-
----
-
-Plan, test and **regulary trigger** failover mechanisms.
-
-
----
-
-Whats next on containers at SysEleven?
-
----
-
-Managed orchestration layer?
-
----
-
-Like setting up a Kubernetes or Docker Swarm cluster
-
-![Cluster](img/cluster.jpg)
-
-https://www.flickr.com/photos/turkletom/<!-- .element: style="font-size: 50%" -->
-
----
-
-And monitor and maintain it.
-
-![Monitor](img/monitoring.jpg)
-
-https://www.flickr.com/photos/mray/<!-- .element: style="font-size: 50%" -->
-
----
-
-But do not care about the services running on it.
-
----
-
-We could go one step further
-
----
-
-Running services for customers!
-
----
-
-Do monitoring and maintenance for the services.
-
----
-
-Customers could use base images from some official registry and build their own images.
-
-Note:
-
-* Like Docker Hub or quay by CoreOS
-
----
-
-We could as well provide some base images that we maintain.
-
----
-
-### But: Here will be some more Dragons
-
----
-
-What if there is a critical bug in some image?
-
----
-
-Who is responsible to build a new "production" image?
-
----
-
-Do we have access to customers code/artefacts to build a new image?
-
----
-
-Or, do we just notify customers?
-
----
-
-Who is responsible for rolling out the new image?
-
-Note:
-
-* To recap
-* Currently we only update/maintain dist software.
-* Do not touch the customers software.
-
----
-
-### Sounds like even more work for our Admins! Are there any benefits?
-
----
-
-A very streamlined deployment process!
-
-Note:
-
-No difference between self-deployer
-
-and customers, who only handover their code.
-
----
-
-In case of Kubernetes: Using Replication Controller.
-
-Note:
-
-Maybe even with auto scaling
-
-Where auto scaling is limited to the running VMs in the kubernetes cluster.
-
----
-
-Kubernetes takes care about the number of running Pods.
-
----
-
-No alerts because of a failing frontend node!
-
----
-
-We are able to run more than one service on a VM, no matter what kind of linux each single service needs.
-
----
-
-There are separate teams for maintaining the services and running Kubernetes.
-
----
-
-![Longway](img/longway.jpg)
-
-And not even clear how far to go.
-
-https://www.flickr.com/photos/96665017@N00/<!-- .element: style="font-size: 50%" -->
-
-
----
-
-### Is "on OpenStack" the only possible area to use containers at SysEleven?
-
----
-
-Far away from what is possible!
-
----
-
-For example, also OpenStack Services are…
-
----
-
-… Services!
-
----
-
-Why not maintaining a kubernetes cluster and run OpenStack as a Service?
-
----
-
-Seriously!
-
-![Stackanetes](img/tectonic-k8s-openstack.svg)
-
-https://tectonic.com/blog/openstack-and-kubernetes-come-together.html
-
----
-
-### These technologies are around there!
-
----
-
-They will gain you benefits.
-
----
-
-But they will introduce new layers of indirection, that you have to manage.
-
-Note:
-
-* or someone for you
-
----
-
-Not everything fits into a container.
-
-![float problem](img/float_problem.gif)
-
-Note:
-
-* No one forces you to use containers!
-
----
-
-It will solve all your problems
-
-![Problems](img/all_problems.jpg)
-
----
-
-# Check the ecosystem
-
-* http://chrigl.de/slides/sysconf15-docker/#/ecosystem<!-- .element: style="font-size: 50%" -->
-* http://chrigl.de/slides/sysconf15-docker/#/resources<!-- .element: style="font-size: 50%" -->
-
-Note:
-
-shameless self plugging
-
----
-
-# And use it!
-
----
-
-###  But use it wisely!
+###  But take care
 
 ![Container fail](img/container-accident.jpg)
-
----
-
-![Good](img/good.jpg)
 
 ---
 
