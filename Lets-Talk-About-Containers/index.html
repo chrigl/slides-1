@@ -74,15 +74,15 @@ No additional overhead by VM kernels
 
 But the disadvantage of just running one kernel.
 
----
+--
 
 Same kernel version for all the containers.
 
----
+--
 
 It is not possible to load different modules for containers.
 
----
+--
 
 OS type in containers must be the same like the host.
 
@@ -98,7 +98,7 @@ Which isolates runtime environments, but does not isolate process space and devi
 
 ---
 
-In 2000, FreeBSD jails were introduced. chroot was extended further isolation mechanisms, like process namespaces. Processes in one jail can only see processes in the same jail.
+In 2000, FreeBSD jails were introduced. chroot was extended by further isolation mechanisms, like process namespaces. Processes in one jail can only see processes in the same jail.
 
 Note:
 
@@ -107,6 +107,37 @@ There are more isolations like prohibition of creating device nodes, mounts and 
 ---
 
 In this time, Virtuozzo started with containers on Linux.
+
+
+---
+
+Without a large popularity, similar concepts landed in mainline over the years
+
+--
+
+Namespaces to limit things, processes can see
+
+--
+
+* cgroups
+* IPC (2.6.30)
+* Network (2.6.24)
+* Mount (2.4.19)
+* PID
+* User
+* UTS
+
+---
+
+cgroups to limit resources a process can use
+
+--
+
+* cpu
+* memory
+* devices
+* blkio
+* […]
 
 ---
 
@@ -121,7 +152,7 @@ Note:
 
 Containers as in "more than just chroot"
 
----
+--
 
 When I worked in the Tivoli Storage Manager Team at IBM, where we had to support AIX WPARs and Solaris Zones.
 
@@ -134,7 +165,7 @@ WPAR = Workload Partition
 The ideas are still the same, also in the times of Application Containers.
 
 * Using the same kernel.
-* Isolate environments as strong as possible.
+* Isolate environments as strong as possible by using the mentioned namespaces and cgroups.
 
 ---
 
@@ -181,6 +212,30 @@ And all this *without* any modification to the image!
 ---
 
 It changed the way we think about software.
+
+--
+
+One application in one container.
+
+--
+
+Only one process where possible.
+
+--
+
+Applications being stateless…
+
+--
+
+… and more fault tolerant.
+
+--
+
+Smaller chunks of source code doing one thing…
+
+--
+
+… which could be deployed independent and often.
 
 ---
 
@@ -269,11 +324,11 @@ Note:
 
 ---
 
-The hardware and hypervisor "layer".
+1 . The hardware and hypervisor "layer".
 
 ---
 
-And the running Virtual Environments or Machines.
+2 . The running Virtual Environments/containers, with all the services in it.
 
 ---
 
@@ -300,6 +355,7 @@ Which is still true, but there is more
 … treating containers like usual virtual machines
 
 * with a complete Linux running inside
+ * starting with the init system
  * sure, except of the kernel
 
 Note:
@@ -425,7 +481,7 @@ on about 300 physical machines
 
 ---
 
-We start the containers, using out internal toolchain.
+We start the containers, using our internal toolchain.
 
 ---
 
@@ -449,6 +505,10 @@ Customers deploy their software to the admin server. From there it will be rsync
 ![Deploy](img/deploy.jpg)
 
 https://www.flickr.com/photos/auxesis/<!-- .element: style="font-size: 50%" -->
+
+Note:
+
+Yes, this is how we deployed code back in the 90th.
 
 ---
 
@@ -578,11 +638,15 @@ But these days we need a public facing API
 
 ---
 
-We didn't have the man power to develop our own.
+We didn't have the man power to develop our own…
+
+--
+
+… and would have to replace too much of the inner core.
 
 ---
 
-And we didn't want to build an proprietary
+And we didn't want to build another proprietary
 
 ![Island](img/island.jpg)
 
@@ -640,7 +704,7 @@ It based on ansible, which creates VMs using the specific API, and runs the depl
 
 ---
 
-We enable customers to be able to do relevant tasks on their own. And get the full power out of the Cloud.
+We enable customers to be able to do relevant tasks on their own, and get the full power out of the Cloud.
 
 ---
 
@@ -685,12 +749,6 @@ Are there future plans to provide managed container services?
 --
 
 ### Of course
-
----
-
-But limited to man power!
-
-http://www.syseleven.de/jobs/
 
 --
 
