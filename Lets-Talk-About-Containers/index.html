@@ -46,9 +46,8 @@ Cloud Architect at SysEleven GmbH<br>
 #### What could you expect from this talk?
 
 * A little bit of history on containers
-* Brief introduction about our infrastructure
- * of cource not on each detail
-* Different ways of deploying software
+* How we used containers in the past
+* What we did to manage our infrastructure
 
 ---
 
@@ -357,10 +356,9 @@ Which is still true, but there is more
 * with a complete Linux running inside
  * starting with the init system
  * sure, except of the kernel
-
-Note:
-
-Your targeted distribution has to be supported
+* target distribution has to be supported by virtuozzo
+ * to set up the network, hostname, etc
+ * this is extensible by shell scripts
 
 ---
 
@@ -378,7 +376,7 @@ https://www.flickr.com/photos/17612257@N00/<!-- .element: style="font-size: 50%"
 
 ---
 
-From the early days, we have decent trending and alerting for all the services the customer provides.
+From the early days, we have decent trending and alerting for all the services running in the containers.
 
 Note:
 
@@ -394,23 +392,90 @@ Note:
 
 We run to many things to monitor for a single instance, running on a 24 Core XEON with 94GB RAM
 
----
-
-Over time, we built billing, a local DNS-API, SSL-Cert "shop", some own metering-endpoints, Backups…
+But one step back.
 
 ---
 
-… we even developed some tools, to spawn new containers with a minimum set of needed configuration…
+… and an AdminTV with relevant graphs
+
+![dashboard](img/dashboard.png)
+
+---
+
+We run a pool of hardware nodes…
+
+![Pool](img/pool.jpg)
+
+… on which we schedule the containers of all customers.
+
+https://www.flickr.com/photos/prinsotel/<!-- .element: style="font-size: 50%" -->
+
+--
+
+In the beginning we track the containers and hardware nodes in some kind of sheet.
+
+---
+
+Creating a new container was like…
+
+--
+
+Having a look into the sheet, and select a host that does not run the same kind of instance of this customer
+
+--
+
+Having a look at the metrics to verify the host still has resources
+
+--
+
+ssh into the host and create the container, using the virtuozzo tools
+
+--
+
+Assigning an ip and a hostname like customer.project.app1
+
+--
+
+Enter the container, and install stuff by hand
+
+--
+
+Register the new container with its services to the monitoring by hand
+
+---
+
+… we developed some tools to automate most of this stuff
 
 ![Robot](img/robot.jpg)
 
----
+--
 
 … with a recommend system to return the best Hardware for the requested container.
 
 ![Recommend](img/recommend.jpg)
 
 https://www.flickr.com/photos/jm3/<!-- .element: style="font-size: 50%" -->
+
+Note:
+
+Which takes care about resources and that we do not run too many instances of a customer on the same hardware.
+
+--
+
+Hostnames are partly calculated. customer.project is pre-filled, but the name app2 has to be selected by hand.
+
+
+Note:
+
+with a duplicate detection in the background.
+
+--
+
+We came up with a tagging system to be a bit more flexible.
+
+Note:
+
+Some containers are i/o bound. They have to go to hosts with FusionIO.
 
 ---
 
@@ -434,13 +499,25 @@ Because of this we decided use OpenStack
 
 ---
 
-### At some point, Configuration Management became cool
+Over time, we built billing, a local DNS-API, SSL-Cert "shop", some own metering-endpoints, Backups…
+
+---
+
+At some point, Configuration Management became cool
 
 ![Puppet](img/puppet.png)
 
-Note:
+--
 
 … and we added a Puppet Master to our infrastructure, and registered all the containers to it. Based on this, we automated much stuff, like provisioning of basic stuff to the container and registering services to the monitoring.
+
+--
+
+We wrote much glue-code
+
+![Glue](img/glue.jpg)
+
+https://www.flickr.com/photos/samcatchesides/<!-- .element: style="font-size: 50%" -->
 
 ---
 
@@ -472,12 +549,18 @@ on about 300 physical machines
 
 ---
 
-### A traditional setup is still
+### How does a traditional setup look
+
+--
 
 * MySQL master slave setup
 * Admin server
 * a bunch of App server
 * maybe some kind of search engine
+
+Note:
+
+Many web apps are written in php
 
 ---
 
@@ -489,7 +572,7 @@ This also triggers puppet to install required software in the container, setting
 
 ---
 
-We hand over *exactly* this fully managed and running container to the customer.
+We hand over *exactly* this container to the customer.
 
 ![Fully managed container](img/managed-container.jpg)
 https://www.flickr.com/photos/lindzgraham/<!-- .element: style="font-size: 50%" -->
@@ -509,6 +592,18 @@ https://www.flickr.com/photos/auxesis/<!-- .element: style="font-size: 50%" -->
 Note:
 
 Yes, this is how we deployed code back in the 90th.
+
+---
+
+Same thing for dev or test setups.
+
+![Development](img/development.jpg)
+
+https://www.flickr.com/photos/christianjann/<!-- .element: style="font-size: 50%" -->
+
+Note:
+
+Only difference, dev-setups are scheduled to less performant hosts.
 
 ---
 
@@ -554,9 +649,9 @@ Often a new container is just a clone of an old one!
 
 https://www.flickr.com/photos/arenamontanus/<!-- .element: style="font-size: 50%" -->
 
-Note:
+--
 
-With things like host name and monitoring stuff changed
+With things like hostname and monitoring stuff changed
 
 ---
 
@@ -575,6 +670,10 @@ At least the entire deployment is not very repeatable.
 ---
 
 So we keep the containers alive, no matter what happens. In the worst case, we clone one back from the nightly backup.
+
+![Maintain](img/maintenance.jpg)
+
+https://www.flickr.com/photos/vagawi/<!-- .element: style="font-size: 50%" -->
 
 Note:
 
@@ -630,7 +729,7 @@ Just to name a few
 
 Anyway.
 
-This worked fine for a very long time…
+This again worked fine for a very long time…
 
 ---
 
@@ -646,7 +745,7 @@ We didn't have the man power to develop our own…
 
 ---
 
-And we didn't want to build another proprietary
+And we did not want to build another proprietary
 
 ![Island](img/island.jpg)
 
@@ -672,7 +771,7 @@ And a bunch of automation to bootstrap
 
 ---
 
-We run managed setups in SysEleven Stack.
+We run managed setups on SysEleven Stack.
 
 ---
 
@@ -708,7 +807,11 @@ We enable customers to be able to do relevant tasks on their own, and get the fu
 
 ---
 
-In the past half year one question raised…
+Despite of this…
+
+--
+
+…in the past half year one question raised…
 
 ---
 
@@ -717,6 +820,12 @@ What about
 ![Docker](img/dacker.jpg)
 
 ?
+
+Note:
+
+Not only potentional new customers,
+
+but old ones as well.
 
 ---
 
@@ -733,14 +842,6 @@ Just install docker into the VM.
 --
 
 Sure. The containers run in VMs. But there is IMHO *no container vs. VM*, while VMs are one possible infrastructure for containers.
-
---
-
-Did I mention, that you should keep your infrastructure as boring as possible?
-
---
-
-Interresting infrastructure tends to fail in interresting ways!
 
 ---
 
@@ -816,6 +917,20 @@ Maybe in a far future…
 
 We could provided managed services running in containers.
 
+--
+
+But there are many things to think about!
+
+![Questions](img/questions.jpg)
+
+https://www.flickr.com/photos/dharmabum1964/<!-- .element: style="font-size: 50%" -->
+
+Note:
+
+Like: Can we build new images with customers code?
+
+In case of a security issue?
+
 ---
 
 ####  Some resources
@@ -833,17 +948,11 @@ We could provided managed services running in containers.
 
 # Happy
 
-![Container](img/containering.jpg)
+![Container fail](img/container-accident.jpg)
 
 Note:
 
 Happy containering!
-
----
-
-###  But take care
-
-![Container fail](img/container-accident.jpg)
 
 ---
 
